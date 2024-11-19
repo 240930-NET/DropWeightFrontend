@@ -42,7 +42,7 @@ function Nutrition() {
         e.preventDefault();
         console.log(addNutritionFormData); // Handle the form submit api call here, POST request to add new nutrition
         
-        const apiKey = 'gW22BYIcjNFebosCY4MdNw==mRnm3XsFETNdLLvx';
+        const apiKey = '';
         const url = `https://api.api-ninjas.com/v1/nutrition?query=${addNutritionFormData.description}`;
 
         try {
