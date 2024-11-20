@@ -1,4 +1,4 @@
-#root {
+/*#root {
   max-width: 1280px;
   margin: 0 auto;
   padding: 2rem;
@@ -39,4 +39,35 @@
 
 .read-the-docs {
   color: #888;
+}
+*/
+
+
+.centerContainer {
+  display: flex;
+  width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+}
+
+.mainContainer {
+  display: flex;
+  width: 100%;
+  max-width: 100%;
+  margin: 0 auto;
+  justify-content: center;
+  margin-top: '20px'
+}
+
+body,
+html {
+  width: 100%;
+  margin: 0;
+  background-color: rgba(255, 255, 255, 1);
+}
+
+html,
+body,
+#root {
+  height: 100%;
 }
