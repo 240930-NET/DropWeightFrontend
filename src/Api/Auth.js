@@ -10,7 +10,7 @@ const getCommonHeader = (token) => ({
 });
 
 
-export const useRegister = (username, password, firstName, lastName, role, institutionId) =>{
+export const useRegister = (username, password, firstName, lastName) =>{
     const [user, setUser] = useState({})
     const { authToken } = useContext(UserContext);
 
@@ -29,8 +29,8 @@ export const useRegister = (username, password, firstName, lastName, role, insti
                 console.error("Failed to register user")
             }
         }
-        if (authToken && username && password && firstName && lastName && role && institutionId) fetchRegister();
-    }, [authToken, username, password, firstName, lastName, role, institutionId])
+        if (authToken && username && password && firstName && lastName) fetchRegister();
+    }, [authToken, username, password, firstName, lastName])
     return user;
 }
 
@@ -68,12 +68,12 @@ export const useLogin = (username, password) => {
     }
 }*/
 
-export const registerAPI = async (username, password, firstName, lastName, role, institutionId) => {
+export const registerAPI = async (username, password, firstName, lastName) => {
     try{
         const response = await fetch(`${url}register`, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ username, password, firstName, lastName, role, institutionId })
+            body: JSON.stringify({ username, password, firstName, lastName})
         });
         const data = await response.json();
         return data || null;
