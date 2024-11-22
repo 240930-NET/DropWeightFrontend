@@ -1,0 +1,73 @@
+/* HomePage Background */
+.home-page {
+  height: 100vh;
+  background-image: url("path-to-your-background-image.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
+  background-position: 50% 50%;
+  transition: background-position 0.1s ease;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  color: white;
+}
+
+/* Hero Section */
+.hero-section {
+  text-align: center;
+  padding: 60px 20px;
+  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
+  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
+  border-radius: 10px;
+  margin: 20px;
+}
+
+.hero-section h1 {
+  font-size: 3rem;
+  margin-bottom: 20px;
+}
+
+.hero-section p {
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+}
+
+.hero-section button {
+  font-size: 1.1rem;
+}
+
+/* Main Content Sections */
+.main-content {
+  margin-top: 30px;
+  text-align: center;
+}
+
+.main-content img {
+  width: 100px;
+  margin-bottom: 10px;
+  border-radius: 50%;
+  border: 2px solid #ddd;
+}
+
+.main-content h3 {
+  font-size: 1.5rem;
+  margin: 10px 0;
+}
+
+.main-content p {
+  font-size: 1rem;
+  color: #eee;
+}
+
+.main-content button {
+  margin-top: 10px;
+}
+
+/* Footer */
+footer {
+  background-color: #343a40;
+  color: #aaa;
+  padding: 20px;
+  text-align: center;
+}
