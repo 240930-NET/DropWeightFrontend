@@ -26,9 +26,9 @@ function Register() {
         try {
             const user = await registerAPI(
                 formData.username,
+                formData.password,
                 formData.firstName,
                 formData.lastName,
-                formData.password
             );
             if (user) {
                 const token = await loginAPI(formData.username, formData.password);

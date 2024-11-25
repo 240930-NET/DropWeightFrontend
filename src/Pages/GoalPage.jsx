@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import './GoalPage.css';
+import '../Styles/GoalPage.css';
 
 function GoalPage() {
     const [goals, setGoals] = useState([]);
     const[inProgressGoals, setInProgressGoals] = useState([]);
     const [completedGoals, setCompletedGoals] = useState([]);
+    const [isModalOpen, setIsModalOpen] = useState(false);
+    const { authToken, currentUser: user } = React.useContext(UserContext);
     const [newGoal, setNewGoal] = useState({
         Type: 0, 
         GoalName: "",
@@ -13,9 +15,8 @@ function GoalPage() {
         StartingValue: 0,
         TargetValue: 0,
         CurrentValue: 0,
-        UserId: 1
+        UserId: user.userId
     });
-    const [isModalOpen, setIsModalOpen] = useState(false);
 
 
     // const fetchGoals = async () => {
@@ -43,11 +44,6 @@ function GoalPage() {
     };
 
 
-
-
-
-
-
     const addGoal = async () => {
         try {
             console.log(newGoal);
@@ -68,7 +64,7 @@ function GoalPage() {
                     StartingValue: 0,
                     TargetValue: 0,
                     CurrentValue: 0,
-                    UserId: 1
+                    UserId: user.userId
                 });
                 fetchGoals(); // Refresh goals
             } else {
@@ -81,8 +77,21 @@ function GoalPage() {
     };
 
 
-
-
+    // const deleteGoal = async () => {
+    //     try {
+    //         const token = localStorage.getItem('token');
+    //         if (token) {
+    //             setAuthToken(token);
+    //         }
+    //         const response = await apiClient.delete('/user/DeleteUser');
+    //         setUserId(response.data.userId);
+    //         alert("Account successfully deleted");
+    //     }
+    //     catch (error) {
+    //         console.error("Error deleting account:", error.response?.data || error.message)
+    //         alert("There was a problem deleting your account. Please try again");
+    //     }
+    // };
 
 
     useEffect(() => {
