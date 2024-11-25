@@ -20,7 +20,7 @@ function Login() {
             }
 
             login(token);
-            navigate('/dashboard');
+            navigate('/');
         } catch (err) {
             console.error('Login error:', err);
             setError('An unexpected error occurred. Please try again later.');
