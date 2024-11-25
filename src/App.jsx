@@ -1,6 +1,7 @@
 import Navbar from "./Components/NavBar";
 import HomePage from "./Pages/HomePage";
 import Nutrition from "./Pages/Nutrition";
+import GoalPage from "./Pages/GoalPage";
 
 import { Container } from "reactstrap";
 import {
@@ -20,6 +21,7 @@ function App() {
         <Routes>
           <Route exact path="/" element={<HomePage />} />
           <Route path="/nutrition" element={<Nutrition />} />
+          <Route path="/goals" element={<GoalPage />} />
         </Routes>
       </Container>
     </Router>
