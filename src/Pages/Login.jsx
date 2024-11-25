@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { UserContext } from '../Utils/UserContext';
 import { loginAPI } from '../Api/Auth';
+import { getUserAPI } from '../Api/User'
 import { useNavigate } from 'react-router-dom';
 
 function Login() {
@@ -14,13 +15,16 @@ function Login() {
         e.preventDefault();
         try {
             const token = await loginAPI(username, password);
+            const user = await getUserAPI(username, token);
             if (!token) {
                 setError('Invalid credentials. Please try again.');
                 return;
             }
 
-            login(token);
-            navigate('/dashboard');
+            login(token, user);
+
+            console.log("Supposed to redirect you")
+            navigate('/');
         } catch (err) {
             console.error('Login error:', err);
             setError('An unexpected error occurred. Please try again later.');

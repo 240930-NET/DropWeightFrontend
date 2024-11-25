@@ -1,10 +1,10 @@
-import React, { useState, useContext } from 'react';
+import React, { useState } from 'react';
 import { registerAPI, loginAPI } from '../Api/Auth';
 import { useNavigate } from 'react-router-dom';
-import { UserContext } from '../Utils/UserContext';
+import { UserContext } from "../Utils/UserContext";
 
 function Register() {
-    const { login } = useContext(UserContext);
+    const { login } = React.useContext(UserContext);
     const [error, setError] = useState('');
     const [formData, setFormData] = useState({
         username: '',
@@ -30,13 +30,11 @@ function Register() {
                 formData.lastName,
                 formData.password
             );
-
             if (user) {
                 const token = await loginAPI(formData.username, formData.password);
                 if (token) {
-                    // Ensure login updates the context properly
                     login(token);
-                    navigate('/dashboard'); // Redirect to dashboard after successful login
+                    navigate('/dashboard');
                 }
             } else {
                 setError('Registration failed. Please try again.');
