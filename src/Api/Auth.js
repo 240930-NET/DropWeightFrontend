@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from '../Utils/UserContext';
 
-const url = 'http://localhost:5276/api/Auth/';
+const url = 'http://localhost:5276/api/auth/';
 const getCommonHeader = (token) => ({
     headers: {
         'Authorization': `Bearer ${token}`,
@@ -57,16 +57,6 @@ export const useLogin = (username, password) => {
     return token;
 }
 
-/*export const getUserAPI = async (username, token) => {
-    try {
-        const response = await fetch(`${url}username/${username}`, getCommonHeader(token));
-        const data = await response.json();
-        return data || null;
-    } catch {
-        console.error('Error fetching user');
-        return null;
-    }
-}*/
 
 export const registerAPI = async (username, password, firstName, lastName) => {
     try{
