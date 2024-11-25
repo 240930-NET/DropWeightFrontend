@@ -1,4 +1,3 @@
-import React from "react";
 import Navbar from "./Components/NavBar";
 import HomePage from "./Pages/HomePage";
 import Nutrition from "./Pages/Nutrition";

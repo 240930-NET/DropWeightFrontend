@@ -17,7 +17,6 @@ import { addNutrition, getUserNutrition, deleteNutrition } from "../Api/Nutritio
 
 function Nutrition() {
     const { authToken, currentUser } = useContext(UserContext);
-    //const authToken = "dfasdf";
     const [nutritions, setNutrition] = useState([]);
     const [todayNutrition, setToday] = useState([]);
     const [error, setError] = useState(null);
@@ -57,9 +56,6 @@ function Nutrition() {
                                             addNutritionFormData.dateTime, 
                                             authToken, currentUser.userId);
         
-        /*const success = await addNutrition(addNutritionFormData.description, 
-            addNutritionFormData.dateTime, 
-            authToken, 1);*/
         if (success == null) {
             setShowPopup(true);
             setError("Food not recognized")
@@ -71,8 +67,7 @@ function Nutrition() {
             return;
 
         }
-        const updatedNutrition = getUserNutrition(authToken, currentUser.userId);
-        //const updatedNutrition = await getUserNutrition(authToken, 1);
+        const updatedNutrition = await getUserNutrition(authToken, currentUser.userId);
         setNutrition(updatedNutrition.sort((a, b) => new Date(b.date) - new Date(a.date)));
         setToday(updatedNutrition.filter(item => isToday(item.date)));
         setAddNutritionFormData(initialAddNutritionFormData);
@@ -100,7 +95,6 @@ function Nutrition() {
        
         async function getNutritions() {
             const userNutrition = await getUserNutrition(authToken, currentUser.userId);
-            //const userNutrition = await getUserNutrition(authToken, 1);
             setNutrition(userNutrition.sort((a, b) => new Date(b.date) - new Date(a.date)));
             setToday(userNutrition.filter(item => isToday(item.date)));
         };
