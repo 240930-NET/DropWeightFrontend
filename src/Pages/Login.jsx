@@ -32,8 +32,8 @@ function Login() {
     };
 
     return (
-        <div className="login-container">
-            <div className="login-box">
+        <div className="form-container">
+            <div className="form-box">
                 <h2>Welcome to DropWeight</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -61,7 +61,7 @@ function Login() {
                     {error && <div className="error-message">{error}</div>}
                     <button type="submit" className="login-button">Login</button>
                 </form>
-                <div className="login-link">
+                <div className="alternate-link">
                     Don't have an account? <a href="/register">Register here</a>
                 </div>
             </div>
