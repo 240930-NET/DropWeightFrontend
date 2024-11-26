@@ -4,6 +4,9 @@ import Nutrition from "./Pages/Nutrition";
 import GoalPage from "./Pages/GoalPage";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
+import ContactUs from './Pages/ContactUs';
+import PrivacyPolicy from './Pages/PrivacyPolicy';
+import TermsOfService from './Pages/TermsOfService';
 
 import React, { useContext } from "react";
 import { Container } from "reactstrap";
@@ -40,6 +43,9 @@ function MainApp() {
               <Route exact path="/" element={<HomePage />} />
               <Route path="/nutrition" element={<Nutrition />} />
               <Route path="/goal" element = {<GoalPage />} />
+              <Route path="/contact" element={<ContactUs />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              <Route path="/terms" element={<TermsOfService />} />
             </>
           ) : (
             <Route path="/*" element={<Navigate to="/login" replace />} />
