@@ -1,73 +1,170 @@
-/* HomePage Background */
+/* Global Settings */
+html, body {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+}
+
+/* Home Page */
 .home-page {
-  height: 100vh;
-  background-image: url("path-to-your-background-image.jpg");
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  background: linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.7)),
+              url('../assets/Images/gym.png');
   background-size: cover;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
-  background-position: 50% 50%;
-  transition: background-position 0.1s ease;
+  background-position: center;
+  color: white;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  color: white;
 }
 
 /* Hero Section */
 .hero-section {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
   text-align: center;
-  padding: 60px 20px;
-  background: rgba(0, 0, 0, 0.5); /* Semi-transparent overlay */
-  box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.3);
-  border-radius: 10px;
-  margin: 20px;
+  padding: 80px 20px;
+  background: rgba(0, 0, 0, 0.3);
+  width: 100%;
 }
 
-.hero-section h1 {
-  font-size: 3rem;
-  margin-bottom: 20px;
+.hero-title {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
 }
 
-.hero-section p {
+.hero-subtitle {
   font-size: 1.2rem;
-  margin-bottom: 30px;
+  max-width: 800px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
 }
 
-.hero-section button {
-  font-size: 1.1rem;
+.get-started-btn {
+  padding: 15px 40px;
+  font-size: 1.2rem;
+  text-transform: uppercase;
+  transition: transform 0.3s ease;
+}
+
+.get-started-btn:hover {
+  transform: translateY(-3px);
 }
 
 /* Main Content Sections */
 .main-content {
-  margin-top: 30px;
-  text-align: center;
+  padding: 0;
+  margin: 0 auto;
+  flex-grow: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
 }
 
-.main-content img {
-  width: 100px;
-  margin-bottom: 10px;
+.container {
+  width: 100%;
+  max-width: 100% !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+.feature-cards {
+  display: flex;
+  gap: 30px;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  margin: 0 auto;
+  width: 100%;
+  padding: 0;
+}
+
+.feature-card {
+  flex: 0 0 30%;
+  margin-bottom: 0;
+  max-width: 350px;
+}
+
+.card-content {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: 30px;
+  border-radius: 15px;
+  transition: transform 0.3s ease;
+  height: 100%;
+}
+
+.card-content:hover {
+  transform: translateY(-10px);
+}
+
+.feature-image {
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
   border-radius: 50%;
-  border: 2px solid #ddd;
+  margin-bottom: 20px;
+  border: 3px solid white;
 }
 
-.main-content h3 {
-  font-size: 1.5rem;
-  margin: 10px 0;
+.feature-card h3 {
+  margin: 20px 0;
+  font-weight: 600;
 }
 
-.main-content p {
-  font-size: 1rem;
-  color: #eee;
+.feature-card p {
+  margin-bottom: 25px;
+  line-height: 1.6;
 }
 
-.main-content button {
-  margin-top: 10px;
+.feature-btn {
+  width: 80%;
+  padding: 10px 20px;
+  transition: all 0.3s ease;
+}
+
+.feature-btn:hover {
+  background-color: #007bff;
+  color: white;
+  transform: translateY(-2px);
 }
 
 /* Footer */
-footer {
-  background-color: #343a40;
-  color: #aaa;
-  padding: 20px;
+.home-footer {
   text-align: center;
+  padding: 20px;
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive Adjustments */
+@media (max-width: 992px) {
+  .feature-cards {
+      flex-direction: column;
+      align-items: center;
+  }
+
+  .feature-card {
+      flex: 0 0 100%;
+      max-width: 400px;
+      margin-bottom: 30px;
+  }
+
+  .main-content {
+      width: 100%;
+      padding: 20px 0;
+  }
+}
+
+/* Hero Logo */
+.hero-logo {
+  max-width: 200px;
+  height: auto;
+  margin-bottom: 2rem;
 }

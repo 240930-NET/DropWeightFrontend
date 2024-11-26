@@ -28,9 +28,9 @@ function Register() {
         try {
             const user = await registerAPI(
                 formData.username,
+                formData.password,
                 formData.firstName,
                 formData.lastName,
-                formData.password
             );
             console.log(user)
             if (user) {

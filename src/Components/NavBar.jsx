@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { NavLink as RouterNavLink } from "react-router-dom";
+import DropWeightLogo from "../assets/Images/DropWeightLogo.png";
+
 
 import {
     Collapse,
@@ -11,7 +13,6 @@ import {
     NavLink,
   } from "reactstrap";
 
-
 const NavBar = () => {
   const [isOpen, setIsOpen] = useState(false);
 
@@ -19,6 +20,21 @@ const NavBar = () => {
     <div>
         <Navbar style={{ backgroundColor: 'rgba(0, 0, 0, 1)' }} dark expand="md" container={false}>
             <Container>
+                {/* Logo Section */}
+                <Nav navbar>
+                    <NavItem>
+                        <NavLink
+                            tag={RouterNavLink}
+                            to="/"
+                        >
+                            <img
+                                src={DropWeightLogo}
+                                alt="Logo"
+                                style={{ height: "50px", width: "auto" }} // Adjust size if needed
+                            />
+                        </NavLink>
+                    </NavItem>
+                </Nav>
                 <NavbarToggler onClick={() => { setIsOpen(!isOpen) }} />
                 <Collapse isOpen={isOpen} navbar>
                     <Nav className="mr-auto" navbar>

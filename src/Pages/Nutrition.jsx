@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { 
     Container, 
     Row, 
@@ -12,70 +12,27 @@ import {
 import NutritionList from "../Components/NutritionList";
 import NutritionToday from "../Components/NutritionToday";
 import NutritionForm from "../Components/NutritionForm";
+import { UserContext } from "../Utils/UserContext";
+import { addNutrition, getUserNutrition, deleteNutrition } from "../Api/Nutrition";
 
 function Nutrition() {
-
+    const { authToken, currentUser } = useContext(UserContext);
     const [nutritions, setNutrition] = useState([]);
     const [todayNutrition, setToday] = useState([]);
     const [error, setError] = useState(null);
     const [addNutritionModal, setAddNutritionModal] = useState(false);
+    const [showPopUp, setShowPopup] = useState(false);
 
     const initialAddNutritionFormData = {
-        description: '', // Default value for description
-        dateTime: '', // Default value for dateTime (optional)
+        description: '', 
+        dateTime: '', 
     };
 
     const [addNutritionFormData, setAddNutritionFormData] = useState(initialAddNutritionFormData);
 
-    
-
     const toggle = () => setAddNutritionModal(!addNutritionModal);
 
-    const handleAddNutritionChange = (e) => {
-        setAddNutritionFormData({
-          ...addNutritionFormData,
-          [e.target.name]: e.target.value,
-        });
-    };
-    
-    const handleAddNutritionSubmit = async (e) => {
-        e.preventDefault();
-        console.log(addNutritionFormData); // Handle the form submit api call here, POST request to add new nutrition
-        
-        const apiKey = '';
-        const url = `https://api.api-ninjas.com/v1/nutrition?query=${addNutritionFormData.description}`;
-
-        try {
-            const response = await fetch(url, {
-                method: 'GET',
-                headers: {
-                    'X-Api-Key': apiKey,
-                    'Content-Type': 'application/json'
-                }
-            });
-
-            if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
-            }
-
-            const result = await response.json();
-            console.log(result);
-            setError(null); // Clear any previous error
-        } catch (err) {
-            setError(err.message);
-            //setData(null); // Clear any previous data
-        }
-        console.log()
-        setAddNutritionFormData(initialAddNutritionFormData);
-        toggle(); 
-    };
-
-    const handleCancel = () => {
-        setAddNutritionFormData(initialAddNutritionFormData);
-        toggle();
-    };
-
-    const isToday = (dateString) => {
+    const isToday = (dateString) => { //utility function to check if a date is today
         const today = new Date();
         const date = new Date(dateString);
         return (
@@ -85,101 +42,64 @@ function Nutrition() {
         );
     };
 
+    const handleAddNutritionChange = (e) => { //Handle changes to the add nutrition form
+        setAddNutritionFormData({
+          ...addNutritionFormData,
+          [e.target.name]: e.target.value,
+        });
+    };
     
-    const handleDeleteItem = (id) => {
-        //send fetch request to actually delete the nutrition from the database
-        const updatedData = nutritionData.filter(item => item.nutritionId !== id);
-        setNutrition(updatedData); 
+    const handleAddNutritionSubmit = async (e) => { //Handle add nutrition form submit
+        e.preventDefault();
+        
+        const success = await addNutrition(addNutritionFormData.description, 
+                                            addNutritionFormData.dateTime, 
+                                            authToken, currentUser.userId);
+        
+        if (success == null) {
+            setShowPopup(true);
+            setError("Food not recognized")
+            return;
+        }
+        if (!success) {
+            setShowPopup(true);
+            setError("Error adding food")
+            return;
+
+        }
+        const updatedNutrition = await getUserNutrition(authToken, currentUser.userId);
+        setNutrition(updatedNutrition.sort((a, b) => new Date(b.date) - new Date(a.date)));
+        setToday(updatedNutrition.filter(item => isToday(item.date)));
+        setAddNutritionFormData(initialAddNutritionFormData);
+        toggle(); 
     };
 
-    const nutritionData = [ //Used to simulate the results of fetch remove later
-        {
-          nutritionId: 1,
-          date: "2024-11-19T08:30:00Z", 
-          description: "Grilled Chicken Breast",
-          servingSize: 100, // in grams
-          calories: 165,
-          totalFat: 3.6,
-          saturatedFat: 1.0,
-          cholesterol: 85, // in mg
-          sodium: 74, // in mg
-          carbohydrates: 0,
-          fiber: 0,
-          sugar: 0,
-          protein: 31,
-          userId: 100,
-        },
-        {
-          nutritionId: 2,
-          date: "2024-11-19T14:45:00Z",
-          description: "Cooked White Rice",
-          servingSize: 150, // in grams
-          calories: 206,
-          totalFat: 0.4,
-          saturatedFat: 0.1,
-          cholesterol: 0,
-          sodium: 1, // in mg
-          carbohydrates: 45,
-          fiber: 0.6,
-          sugar: 0,
-          protein: 4.3,
-          userId: 100,
-        },
-        {
-          nutritionId: 3,
-          date: "2024-11-18T10:00:00Z",
-          description: "Steamed Broccoli",
-          servingSize: 85, // in grams
-          calories: 55,
-          totalFat: 0.6,
-          saturatedFat: 0.1,
-          cholesterol: 0,
-          sodium: 33, // in mg
-          carbohydrates: 11.2,
-          fiber: 5.1,
-          sugar: 2.2,
-          protein: 3.7,
-          userId: 100,
-        },
-        {
-          nutritionId: 4,
-          date: "2024-11-16T17:00:00Z",
-          description: "Raw Apple",
-          servingSize: 182, // in grams
-          calories: 95,
-          totalFat: 0.3,
-          saturatedFat: 0.1,
-          cholesterol: 0,
-          sodium: 2, // in mg
-          carbohydrates: 25,
-          fiber: 4.4,
-          sugar: 19,
-          protein: 0.5,
-          userId: 100,
-        },
-        {
-          nutritionId: 5,
-          date: "2024-11-19T23:59:59Z",
-          description: "Almond Milk, Unsweetened",
-          servingSize: 240, // in ml
-          calories: 30,
-          totalFat: 2.5,
-          saturatedFat: 0.2,
-          cholesterol: 0,
-          sodium: 170, // in mg
-          carbohydrates: 1,
-          fiber: 0,
-          sugar: 0,
-          protein: 1,
-          userId: 100,
-        },
-      ];
+    const handleCancel = () => { //handle nutrition form cancel button
+        setAddNutritionFormData(initialAddNutritionFormData);
+        toggle();
+    };
 
+    const closePopup = () => {
+        setShowPopup(!showPopUp);
+    };
     
-    useEffect(() => { //update this to actually fetch the data first with fetch request
-        setNutrition(nutritionData.sort((a, b) => new Date(b.date) - new Date(a.date)));
-        setToday(nutritionData.filter(item => isToday(item.date)));
-    }, []);
+    const handleDeleteItem = async (id) => { //handle the user pressing the delete nutrition button
+        const success = await deleteNutrition(id, authToken);
+        if (!success) return;
+        const updatedData = nutritions.filter(item => item.nutritionId !== id);
+        setNutrition(updatedData.sort((a, b) => new Date(b.date) - new Date(a.date))); 
+        setToday(updatedData.filter(item => isToday(item.date)));
+    };
+
+    useEffect( ()  => { //Gets all user nutrition on first run
+       
+        async function getNutritions() {
+            const userNutrition = await getUserNutrition(authToken, currentUser.userId);
+            setNutrition(userNutrition.sort((a, b) => new Date(b.date) - new Date(a.date)));
+            setToday(userNutrition.filter(item => isToday(item.date)));
+        };
+        getNutritions();        
+    }, [] );
 
     return (
         <Container style={{marginTop: '20px'}}>
@@ -205,6 +125,15 @@ function Nutrition() {
                     <Button color="secondary" onClick={handleCancel}>Cancel</Button>
                 </ModalFooter>
             </Modal>
+            <Modal isOpen={showPopUp} toggle={closePopup}>
+                <ModalHeader toggle={closePopup}>Error</ModalHeader>
+                <ModalBody>
+                <p>{error}</p>
+                </ModalBody>
+                <ModalFooter>
+                <Button color="secondary" onClick={closePopup}>Close</Button>
+            </ModalFooter>
+        </Modal>
         </Container>
         
     );

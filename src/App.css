@@ -42,6 +42,38 @@
 }
 */
 
+.form-container {
+  margin-top: 35px;
+}
+
+.form-group {
+  margin-bottom: 10px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: bold;
+}
+
+.form-group input {
+  width: 100%;
+}
+
+.form-box form {
+  margin-top: 10px;
+  border: 2px solid #120b0b;
+  border-radius: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.alternate-link {
+  margin-top: 7px;
+  padding-left: 10px;
+}
 
 .centerContainer {
   display: flex;
@@ -56,7 +88,8 @@
   max-width: 100%;
   margin: 0 auto;
   justify-content: center;
-  margin-top: '20px'
+  margin-top: '20px';
+  padding: 0;
 }
 
 body,
@@ -70,5 +103,6 @@ html,
 body,
 #root {
   height: 100%;
+  min-height: 100%;
   width: 100%;
 }

@@ -33,8 +33,8 @@ const NutritionToday = ({ nutrition }) => {
     
     nutrition.forEach(item => {
         categoryTotals.calories += item.calories || 0;
-        categoryTotals.totalfat += item.totalfat || 0;
-        categoryTotals.saturatedfat += item.saturatedfat || 0;
+        categoryTotals.totalfat += item.totalFat || 0;
+        categoryTotals.saturatedfat += item.saturatedFat || 0;
         categoryTotals.cholesterol += item.cholesterol || 0;
         categoryTotals.sodium += item.sodium || 0;
         categoryTotals.carbohydrates += item.carbohydrates || 0;
@@ -51,7 +51,7 @@ const NutritionToday = ({ nutrition }) => {
                         {Object.entries(categoryTotals).map(([category, total], index) => (
                             <div key={category} className="d-flex justify-content-between mb-2  border-bottom pb-2">
                                 <span>{formatCategoryName(category)}:</span>
-                                <span>{total} {getSymbol(category)}</span>
+                                <span>{total.toFixed(2)} {getSymbol(category)}</span>
                           </div>
                         ))}
                 </CardBody>
