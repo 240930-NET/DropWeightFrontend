@@ -30,9 +30,14 @@ function MainApp() {
       {user && <Navbar />}
       <Container className="mainContainer">
         <Routes>
-          <Route path="/login" element={<Login />} />
-          <Route path="/register" element={<Register />} />
-
+          {!user ? (
+            <>
+              <Route path="/login" element={<Login />} />
+              <Route path="/register" element={<Register />} />
+            </>
+          ) : (
+            <Route path="/*" element={<Navigate to="/" replace />} />
+          )}
           {user ? (
             <>
               <Route exact path="/" element={<HomePage />} />
