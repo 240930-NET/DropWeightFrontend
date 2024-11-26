@@ -1,0 +1,114 @@
+/* Wrapper for Centering Content */
+.registerWrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    width: 100vw;
+    background: linear-gradient(135deg, #4caf50, #2e7d32); /* Green gradient */
+}
+
+/* Container */
+.registerContainer {
+    background-color: #fff;
+    padding: 30px 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    max-width: 400px;
+    width: 100%;
+    text-align: center;
+}
+
+/* Logo */
+.logo {
+    max-width: 150px;
+    margin-bottom: 20px;
+}
+
+/* Heading */
+.heading {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #2e7d32;
+}
+
+/* Form Group */
+.formGroup {
+    margin-bottom: 15px;
+    text-align: left;
+}
+
+/* Labels */
+.formGroup label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+    color: #333;
+}
+
+/* Input Fields */
+.inputField {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+.inputField:focus {
+    border-color: #2e7d32;
+    outline: none;
+    box-shadow: 0 0 5px rgba(46, 125, 50, 0.5);
+}
+
+/* Error Message */
+.errorMessage {
+    color: #d32f2f;
+    font-size: 14px;
+    margin: 10px 0;
+}
+
+/* Button */
+.registerButton {
+    width: 100%;
+    padding: 12px;
+    background-color: #2e7d32;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 16px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.registerButton:hover {
+    background-color: #1b5e20;
+}
+
+.registerButton:active {
+    background-color: #388e3c;
+}
+
+/* Divider */
+.divider {
+    margin: 20px 0;
+    border: none;
+    border-top: 1px solid #ccc;
+}
+
+/* Links */
+.registerLink {
+    font-size: 14px;
+    color: #666;
+}
+
+.loginLink {
+    color: #2e7d32;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+.loginLink:hover {
+    text-decoration: underline;
+}

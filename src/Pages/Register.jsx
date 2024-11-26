@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import { registerAPI, loginAPI } from '../Api/Auth';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from "../Utils/UserContext";
+import styles from '../Styles/Register.module.css';
+import DropWeightLogo from '../assets/DropWeightLogo.png';
 
 function Register() {
     const { login } = React.useContext(UserContext);
@@ -30,11 +32,12 @@ function Register() {
                 formData.lastName,
                 formData.password
             );
+            console.log(user)
             if (user) {
                 const token = await loginAPI(formData.username, formData.password);
                 if (token) {
-                    login(token);
-                    navigate('/dashboard');
+                    login(token, user);
+                    navigate('/');
                 }
             } else {
                 setError('Registration failed. Please try again.');
@@ -46,11 +49,12 @@ function Register() {
     };
 
     return (
-        <div className="register-container">
-            <div className="register-box">
-                <h2>Register for DropWeight</h2>
+        <div className={styles.registerWrapper}>
+            <div className={styles.registerContainer}>
+                <img src={DropWeightLogo} alt="DropWeight Logo" className={styles.logo} />
+                <h2 className={styles.heading}>Register for DropWeight</h2>
                 <form onSubmit={handleSubmit}>
-                    <div className="form-group">
+                    <div className={styles.formGroup}>
                         <label htmlFor="username">Username</label>
                         <input
                             id="username"
@@ -60,9 +64,10 @@ function Register() {
                             onChange={handleChange}
                             placeholder="Enter your username"
                             required
+                            className={styles.inputField}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className={styles.formGroup}>
                         <label htmlFor="firstName">First Name</label>
                         <input
                             id="firstName"
@@ -72,9 +77,10 @@ function Register() {
                             onChange={handleChange}
                             placeholder="Enter your first name"
                             required
+                            className={styles.inputField}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className={styles.formGroup}>
                         <label htmlFor="lastName">Last Name</label>
                         <input
                             id="lastName"
@@ -84,9 +90,10 @@ function Register() {
                             onChange={handleChange}
                             placeholder="Enter your last name"
                             required
+                            className={styles.inputField}
                         />
                     </div>
-                    <div className="form-group">
+                    <div className={styles.formGroup}>
                         <label htmlFor="password">Password</label>
                         <input
                             id="password"
@@ -96,13 +103,19 @@ function Register() {
                             onChange={handleChange}
                             placeholder="Enter your password"
                             required
+                            className={styles.inputField}
                         />
                     </div>
-                    {error && <div className="error-message">{error}</div>}
-                    <button type="submit" className="register-button">Register</button>
+                    {error && (
+                        <div role="alert" className={styles.errorMessage}>
+                            {error}
+                        </div>
+                    )}
+                    <button type="submit" className={styles.registerButton}>Register</button>
                 </form>
-                <div className="register-link">
-                    Already have an account? <a href="/login">Login here</a>
+                <hr className={styles.divider} />
+                <div className={styles.registerLink}>
+                    Already have an account? <a href="/login" className={styles.loginLink}>Login here</a>
                 </div>
             </div>
         </div>
