@@ -26,9 +26,9 @@ function Register() {
         try {
             const user = await registerAPI(
                 formData.username,
+                formData.password,
                 formData.firstName,
                 formData.lastName,
-                formData.password
             );
             if (user) {
                 const token = await loginAPI(formData.username, formData.password);
@@ -46,8 +46,8 @@ function Register() {
     };
 
     return (
-        <div className="register-container">
-            <div className="register-box">
+        <div className="form-container">
+            <div className="form-box">
                 <h2>Register for DropWeight</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="form-group">
@@ -101,7 +101,7 @@ function Register() {
                     {error && <div className="error-message">{error}</div>}
                     <button type="submit" className="register-button">Register</button>
                 </form>
-                <div className="register-link">
+                <div className="alternate-link">
                     Already have an account? <a href="/login">Login here</a>
                 </div>
             </div>

@@ -1,6 +1,7 @@
 import Navbar from "./Components/NavBar";
 import HomePage from "./Pages/HomePage";
 import Nutrition from "./Pages/Nutrition";
+import GoalPage from "./Pages/GoalPage";
 import Login from "./Pages/Login";
 import Register from "./Pages/Register";
 
@@ -14,6 +15,7 @@ import './App.css';
 function App() {
   return (
     <Router>
+      <Navbar />
       <UserProvider>
         <MainApp />
       </UserProvider>
@@ -42,6 +44,7 @@ function MainApp() {
             <>
               <Route exact path="/" element={<HomePage />} />
               <Route path="/nutrition" element={<Nutrition />} />
+              <Route path="/goal" element = {<GoalPage />} />
             </>
           ) : (
             <Route path="/*" element={<Navigate to="/login" replace />} />
