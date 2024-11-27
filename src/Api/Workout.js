@@ -57,14 +57,7 @@ export const getWorkoutsByType = async (type, token) => {
 };
 
 export const createWorkout = async (workout, token) => {
-    try {
-        console.log("token: ", token)
-        console.log({
-            method: 'POST',
-            headers: getCommonHeader(token).headers,
-            body: JSON.stringify(workout),
-        });
-        
+    try {       
         const response = await fetch(url, {
             method: 'POST',
             headers: {
