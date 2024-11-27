@@ -56,7 +56,7 @@ const NutritionTracker = () => {
         const success = await addNutrition(addNutritionFormData.description, 
                                             addNutritionFormData.dateTime, 
                                             authToken, currentUser.userId);
-        
+    
         if (success == null) {
             setShowPopup(true);
             setError("Food not recognized")
