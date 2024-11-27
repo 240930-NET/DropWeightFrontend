@@ -43,7 +43,7 @@ function MainApp() {
             <>
               <Route path="/" element={<HomePage />} />
               <Route path="/nutrition" element={<Nutrition />} />
-              <Route path="/workout" element={<Workout />} />
+              <Route path="/workouts" element={<Workout />} />
               <Route path="/goals" element={<GoalPage />} />
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
