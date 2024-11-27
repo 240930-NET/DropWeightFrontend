@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { 
-    Container, 
-    Row, 
-    Col, 
-    Button, 
-    Modal, 
-    ModalHeader, 
-    ModalBody, 
-    ModalFooter
-} from 'reactstrap';
+import { UserContext } from "../Utils/UserContext";
+import { addNutrition, getUserNutrition, deleteNutrition } from "../Api/Nutrition";
 import NutritionList from "../Components/NutritionList";
 import NutritionToday from "../Components/NutritionToday";
 import NutritionForm from "../Components/NutritionForm";
-import { UserContext } from "../Utils/UserContext";
-import { addNutrition, getUserNutrition, deleteNutrition } from "../Api/Nutrition";
+import { PlusCircle } from 'lucide-react';
+import "../Styles/nutrition.css";
+import { Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-function Nutrition() {
+const NutritionTracker = () => {
     const { authToken, currentUser } = useContext(UserContext);
     const [nutritions, setNutrition] = useState([]);
     const [todayNutrition, setToday] = useState([]);
@@ -30,7 +23,16 @@ function Nutrition() {
 
     const [addNutritionFormData, setAddNutritionFormData] = useState(initialAddNutritionFormData);
 
-    const toggle = () => setAddNutritionModal(!addNutritionModal);
+    const toggle = () => {
+        if (addNutritionModal) {
+            document.body.style.overflow = 'unset';
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.parentElement.removeChild(backdrop);
+            }
+        }
+        setAddNutritionModal(!addNutritionModal);
+    };
 
     const isToday = (dateString) => { //utility function to check if a date is today
         const today = new Date();
@@ -100,6 +102,17 @@ function Nutrition() {
         getNutritions();        
     }, [] );
 
+    useEffect(() => {
+        // Cleanup function
+        return () => {
+            document.body.style.overflow = 'unset';
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.parentElement.removeChild(backdrop);
+            }
+        };
+    }, []); // Empty dependency array means this runs on unmount
+
     return (
         <Container style={{marginTop: '20px'}}>
             <Row className="align-items-start">
@@ -108,35 +121,42 @@ function Nutrition() {
                 </Col>
                 <Col md={4} className="flex-column d-flex align-items-center">
                     <NutritionToday nutrition={todayNutrition} />
-                    <Button color="primary" className="mt-2" onClick={toggle}>Add Nutrition</Button>
+                    <Button className="add-nutrition-btn" onClick={toggle}>
+                        <PlusCircle size={16} />
+                        Add Nutrition
+                    </Button>
                 </Col>
             </Row>
-            <Modal isOpen={addNutritionModal} toggle={toggle}>
-                <ModalHeader toggle={toggle}>Fill Out the Form</ModalHeader>
-                <ModalBody>
-                    <NutritionForm 
-                        formData={addNutritionFormData} 
-                        handleChange={handleAddNutritionChange} 
-                        handleSubmit={handleAddNutritionSubmit} 
-                    />
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="secondary" onClick={handleCancel}>Cancel</Button>
-                </ModalFooter>
-            </Modal>
-            <Modal isOpen={showPopUp} toggle={closePopup}>
-                <ModalHeader toggle={closePopup}>Error</ModalHeader>
-                <ModalBody>
-                <p>{error}</p>
-                </ModalBody>
-                <ModalFooter>
-                <Button color="secondary" onClick={closePopup}>Close</Button>
-            </ModalFooter>
-        </Modal>
-        </Container>
-        
-    );
-}
 
-export default Nutrition;
+            {addNutritionModal && (
+                <div className="modal-wrapper">
+                    <Modal isOpen={true} toggle={toggle} backdrop={true} keyboard={true}>
+                        <ModalHeader toggle={toggle}>Fill Out the Form</ModalHeader>
+                        <ModalBody>
+                            <NutritionForm 
+                                formData={addNutritionFormData} 
+                                handleChange={handleAddNutritionChange} 
+                                handleSubmit={handleAddNutritionSubmit} 
+                            />
+                        </ModalBody>
+                    </Modal>
+                </div>
+            )}
+
+            {showPopUp && (
+                <Modal isOpen={true} toggle={() => setShowPopup(false)}>
+                    <ModalHeader toggle={() => setShowPopup(false)}>Error</ModalHeader>
+                    <ModalBody>
+                        <p>{error}</p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={() => setShowPopup(false)}>Close</Button>
+                    </ModalFooter>
+                </Modal>
+            )}
+        </Container>
+    );
+};
+
+export default NutritionTracker;
 

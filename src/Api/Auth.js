@@ -10,53 +10,6 @@ const getCommonHeader = (token) => ({
 });
 
 
-export const useRegister = (username, password, firstName, lastName) =>{
-    const [user, setUser] = useState({})
-    const { authToken } = useContext(UserContext);
-
-    useEffect(() => {
-        const fetchRegister = async () => {
-            try{
-                const response = await fetch(`${url}register`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password, firstName, lastName})
-                });
-                const data = await response.json();
-                setUser(data || {})
-                if (response.status !== 204) throw new Error();
-            } catch {
-                console.error("Failed to register user")
-            }
-        }
-        if (authToken && username && password && firstName && lastName) fetchRegister();
-    }, [authToken, username, password, firstName, lastName])
-    return user;
-}
-
-
-export const useLogin = (username, password) => {
-    const [token, setToken] = useState("");
-
-    useEffect(() => {
-        const fetchToken = async () => {
-            try {
-                const response = await fetch(`${url}login`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ username, password })
-                });
-                const data = await response.json();
-                setToken(data?.token || '')
-            } catch (error) {
-                console.error("Error fetching Token: ", error.message)
-            }
-        }
-        if (username && password) fetchToken();
-    }, [username, password]);
-    return token;
-}
-
 
 export const registerAPI = async (username, password, firstName, lastName) => {
     try{
@@ -66,9 +19,12 @@ export const registerAPI = async (username, password, firstName, lastName) => {
             body: JSON.stringify({ username, password, firstName, lastName})
         });
         const data = await response.json();
+        console.log("data")
+        console.log(data)
         return data || null;
-    } catch {
+    } catch (e) {
         console.error("Failed to register user")
+        console.log(e)
         return null;
     }
 }
