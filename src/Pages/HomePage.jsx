@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Container, Button, Row, Col } from "reactstrap";
 import { useNavigate } from "react-router-dom";
 import "../Styles/HomePage.css";
-import fitnessBackground from "../assets/Images/Gym.png";
+import fitnessBackground from "../assets/Images/gym.png";
 import {
   Carousel,
   CarouselItem,

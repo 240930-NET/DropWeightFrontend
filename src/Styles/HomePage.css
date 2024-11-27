@@ -16,7 +16,7 @@ body {
       rgba(33, 147, 176, 0.1),
       rgba(109, 213, 237, 0.1)
     ),
-    url("../assets/Images/Gym.png");
+    url("../assets/Images/gym.png");
   background-size: cover;
   background-position: center;
   background-attachment: fixed;
@@ -38,7 +38,7 @@ body {
       rgba(0, 0, 0, 0.7),
       rgba(0, 0, 0, 0.7)
     ),
-    url("../assets/Images/fitness-background.jpg");
+    url("../assets/Images/gym.jpg");
   background-size: cover;
   background-position: center;
   color: white;
