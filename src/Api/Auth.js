@@ -1,7 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { UserContext } from '../Utils/UserContext';
 
-const url = 'http://localhost:5276/api/auth/';
+const url = 'https://dropweightbackend.azurewebsites.net/api/auth/';
 const getCommonHeader = (token) => ({
     headers: {
         'Authorization': `Bearer ${token}`,

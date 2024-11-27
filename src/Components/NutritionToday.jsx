@@ -2,6 +2,15 @@ import React from "react";
 import { Card, CardBody, Container } from "reactstrap";
 
 const NutritionToday = ({ nutrition }) => {
+  const getUnits = (category) => {
+    if (category === "calories") {
+        return 'kcal';
+    }
+    else if (category === "sodium" || category === "cholesterol") {
+        return 'mg';
+    }
+    else return 'g';
+  }
   const categoryTotals = {
     calories: 0,
     totalfat: 0,
@@ -34,7 +43,7 @@ const NutritionToday = ({ nutrition }) => {
           {Object.entries(categoryTotals).map(([category, total]) => (
             <div key={category} className="category">
               <span>{category.charAt(0).toUpperCase() + category.slice(1)}:</span>
-              <span>{total.toFixed(2)}</span>
+              <span>{total.toFixed(2)} {getUnits(category)}</span>
             </div>
           ))}
         </CardBody>

@@ -2,7 +2,7 @@
 import { UserContext } from '../Utils/UserContext';
 import { useContext } from 'react';
 
-const url = 'http://localhost:5276/api/workout/';
+const url = 'https://dropweightbackend.azurewebsites.net/api/workout/';
 
 const getCommonHeader = (token) => ({
     headers: {

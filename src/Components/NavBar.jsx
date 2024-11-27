@@ -50,9 +50,6 @@ const NavBar = () => {
                                 <NavLink
                                     tag={RouterNavLink}
                                     to="/"
-                                    className={({ isActive }) =>
-                                        "nav-link" + (isActive ? " active" : "")
-                                    }
                                 >
                                     Home
                                 </NavLink>
@@ -60,10 +57,7 @@ const NavBar = () => {
                             <NavItem>
                                 <NavLink
                                     tag={RouterNavLink}
-                                    to="/workout"
-                                    className={({ isActive }) =>
-                                        "nav-link" + (isActive ? " active" : "")
-                                    }
+                                    to="/workouts"
                                 >
                                     Workouts
                                 </NavLink>
@@ -72,9 +66,6 @@ const NavBar = () => {
                                 <NavLink
                                     tag={RouterNavLink}
                                     to="/nutrition"
-                                    className={({ isActive }) =>
-                                        "nav-link" + (isActive ? " active" : "")
-                                    }
                                 >
                                     Nutrition
                                 </NavLink>
@@ -83,9 +74,6 @@ const NavBar = () => {
                                 <NavLink
                                     tag={RouterNavLink}
                                     to="/goals"
-                                    className={({ isActive }) =>
-                                        "nav-link" + (isActive ? " active" : "")
-                                    }
                                 >
                                     Goals
                                 </NavLink>

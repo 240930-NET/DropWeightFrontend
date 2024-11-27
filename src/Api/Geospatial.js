@@ -1,4 +1,4 @@
-const baseUrl = 'http://localhost:5276/api/geospatial/';
+const baseUrl = 'https://dropweightbackend.azurewebsites.net/api/geospatial/';
 
 const getCommonHeader = (token) => ({
     headers: {

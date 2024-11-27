@@ -114,7 +114,7 @@ const NutritionTracker = () => {
     }, []); // Empty dependency array means this runs on unmount
 
     return (
-        <Container style={{marginTop: '20px'}}>
+        <Container className="nutrition-container" style={{marginTop: '20px'}}>
             <Row className="align-items-start">
                 <Col md={8}> 
                     <NutritionList nutrition={nutritions} onDelete={handleDeleteItem}/>

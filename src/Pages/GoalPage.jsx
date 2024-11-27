@@ -34,11 +34,12 @@ function GoalPage() {
 
     const fetchGoals = async () => {
         try {
-            const response = await fetch("http://localhost:5276/api/Goal", {
+            const response = await fetch("https://dropweightbackend.azurewebsites.net/api/Goal", {
+                method: 'GET',
                 headers: {
-                    "Authorization": `Bearer ${authToken}`,
-                    "Content-Type": "application/json"
-                }
+                'Authorization': `Bearer ${authToken}`,
+                'Content-Type': 'application/json'
+                },
             });
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -53,7 +54,7 @@ function GoalPage() {
     const handleAddGoal = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch("http://localhost:5276/api/Goal", {
+            const response = await fetch("https://dropweightbackend.azurewebsites.net/api/Goal", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
@@ -83,7 +84,7 @@ function GoalPage() {
     const handleEditGoal = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:5276/api/Goal/${goalToEdit.goalId}`, {
+            const response = await fetch(`https://dropweightbackend.azurewebsites.net/api/Goal/${goalToEdit.goalId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -102,7 +103,7 @@ function GoalPage() {
 
     const handleDeleteGoal = async (goalId) => {
         try {
-            const response = await fetch(`http://localhost:5276/api/Goal/${goalId}`, {
+            const response = await fetch(`https://dropweightbackend.azurewebsites.net/api/Goal/${goalId}`, {
                 method: "DELETE",
                 headers: {
                     "Authorization": `Bearer ${authToken}`,
@@ -122,17 +123,15 @@ function GoalPage() {
     };
 
     useEffect(() => {
-        if (authToken) {
-            fetchGoals();
-        }
-    }, [authToken]);
+        fetchGoals();
+    }, []);
 
     useEffect(() => {
         const inProgress = goals.filter(goal => !goal.isAchieved);
         const completed = goals.filter(goal => goal.isAchieved);
         setInProgressGoals(inProgress);
         setCompletedGoals(completed);
-    }, [goals]);
+    }, []);
 
     return (
         <div className="kanban-board">
