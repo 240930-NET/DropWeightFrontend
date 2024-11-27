@@ -21,7 +21,7 @@ export const UserProvider = ({children}) => {
         setCurrentUser(null);
         localStorage.removeItem('authToken');
         localStorage.removeItem('currentUser');
-        navigate('/');
+        navigate('/login');
     };
 
     const checkToken = () => {

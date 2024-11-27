@@ -48,10 +48,9 @@ function Nutrition() {
           [e.target.name]: e.target.value,
         });
     };
-    
+
     const handleAddNutritionSubmit = async (e) => { //Handle add nutrition form submit
         e.preventDefault();
-        
         const success = await addNutrition(addNutritionFormData.description, 
                                             addNutritionFormData.dateTime, 
                                             authToken, currentUser.userId);

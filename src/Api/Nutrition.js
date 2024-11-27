@@ -1,5 +1,6 @@
+import { format } from 'date-fns';
 
-const url = 'http://localhost:5276/api/Nutrition/';
+const url = 'https://dropweightbackend.azurewebsites.net/api/Nutrition/';
 
 export const getAllNutrition = async () => { 
     try {
@@ -69,12 +70,11 @@ export const addNutrition = async (query, dateTime, authToken, userId) => {
 
     const nutritionData = await queryNutrition(query);
     if(nutritionData == null) return null;
-   // console.log(nutritionData);
     
     const nutritionToAdd = { 
         description: query.charAt(0).toUpperCase()
                         + query.slice(1),
-        date: dateTime || new Date(),
+        date: dateTime || format(new Date(), "yyyy-MM-dd'T'HH:mm"),
         servingSize: nutritionData.foods[0].serving_weight_grams || 0,
         calories: nutritionData.foods[0].nf_calories || 0,
         totalFat: nutritionData.foods[0].nf_total_fat || 0,
@@ -87,7 +87,7 @@ export const addNutrition = async (query, dateTime, authToken, userId) => {
         protein: nutritionData.foods[0].nf_protein || 0,
         userId: userId
     };
-    //console.log(nutritionToAdd);
+
     try {
         const response = await fetch(`${url}`, {
             method: 'POST',
