@@ -25,7 +25,7 @@ function GoalPage() {
         0: "Weight",
         1: "Strength",
         2: "Mile Time",
-        3: "Custom"
+   //     3: "Custom"
     };
 
     const fetchGoals = async () => {
@@ -178,7 +178,7 @@ function GoalPage() {
                                 <option value="0"> Weight </option>
                                 <option value="1"> Strength </option>
                                 <option value="2"> Mile Time </option>
-                                <option value="3"> Custom </option>
+                           {/*     <option value="3"> Custom </option>  */}
                             </select>
                         </label>
                         <label>
@@ -241,7 +241,7 @@ function GoalPage() {
                                 <option value="0">Weight</option>
                                 <option value="1">Strength</option>
                                 <option value="2">Mile Time</option>
-                                <option value="3">Custom</option>
+                             {/*   <option value="3">Custom</option>  */}
                             </select>
                         </label>
                         <label>
@@ -332,16 +332,16 @@ function GoalPage() {
                     <h2> Completed Goals </h2>
                     {completedGoals.length > 0 ? (
                         completedGoals.map(goal => (
-                            <div key={goal.GoalId} className="goal-card"> 
-                                <h3> {goal.GoalName ? goal.GoalName : goalTypeMapping[goal.type]} </h3>
-                                <p> {goal.Description} </p>
+                            <div key={goal.goalId} className="goal-card"> 
+                                <h3> {goal.goalName ? goal.goalName : goalTypeMapping[goal.type]} </h3>
+                                <p> {goal.description} </p>
 
                                 <div className = "progress-container">
-                                    <div className = "progress-bar" style={{width: `${goal.Progress}%`}}> </div>
+                                    <div className = "progress-bar" style={{width: `${goal.progress}%`}}> </div>
                                     <div className = "progress-info">
-                                        <span className="start-value"> {goal.StartingValue} </span>
-                                        <span className="current-value" style={{ left: `${goal.Progress}%` }}> {goal.CurrentValue} </span>
-                                        <span className="target-value"> {goal.TargetValue} </span>
+                                        <span className="start-value"> {goal.startingValue} </span>
+                                        <span className="current-value" style={{ left: `${goal.progress}%` }}> {goal.currentValue} </span>
+                                        <span className="target-value"> {goal.targetValue} </span>
                                     </div>
                                 </div>
 

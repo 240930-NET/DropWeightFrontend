@@ -1,48 +1,44 @@
-
-
 .modal {
     display: block;
 }
 
 .kanban-board {
-    display: flex; /* Enables flexbox layout */
+    display: flex; 
     flex-direction: column; /* Stack button and columns vertically */
-    gap: 20px; /* Adjust the gap between button and columns */
+    gap: 20px; 
 }
 
 .kanban-board-columns {
     display: flex; /* Keeps columns side by side horizontally */
     justify-content: space-between; /* Distribute columns with space between */
-    gap: 150px; /* Adjust space between the columns */
+    gap: 150px; 
 }
 
 .add-goal-button {
-    align-self: center; /* Centers the button horizontally */
-    margin-bottom: 20px; /* Adds space below the button */
-    margin-top: 20px; /* Adds space above the button (between the button and navbar) */
-    padding: 10px 20px; /* Adds space inside the button (top-bottom, left-right) */
-    border-radius: 5px; /* Optional: rounds the corners of the button */
-    background-color: green; /* green background to make the border stand out */
-    color: white; /* white text color */
-    font-size: 16px; /* Adjusts font size */
-    cursor: pointer; /* Makes the button look clickable */
-    width: auto; /* Button width adjusts to its content */
-    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+    align-self: center; 
+    margin-bottom: 20px; 
+    margin-top: 20px; 
+    padding: 10px 20px; 
+    border-radius: 5px; /* rounds the corners of the button */
+    background-color: green; 
+    color: white; 
+    font-size: 16px; 
+    cursor: pointer; 
 }
 
 .edit-button, .delete-button {
     padding: 8px 12px;
-    background-color: #4caf50; /* Green */
+    background-color: green; 
     border: none;
     color: white;
     border-radius: 5px;
     cursor: pointer;
-    margin-top: 20px; /* Moves the buttons beneath the progress bar */
-    margin-left: 20px; /* Adds space between the buttons */
+    margin-top: 20px; 
+    margin-left: 20px; 
 }
 
 .delete-button {
-    background-color: #f44336; /* Red */
+    background-color: red; 
 }
 
 .kanban-column-progress {
@@ -55,20 +51,20 @@
 }
 
 .goal-card {
-    padding: 15px; /* Add padding inside the goal card */
-    margin-bottom: 15px; /* Add space below each card */
-    background-color: #fff; /* Optional: background color for the card */
-    border-radius: 8px; /* Optional: rounded corners */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: subtle shadow */
+    padding: 15px; 
+    margin-bottom: 15px; 
+    background-color: white; 
+    border-radius: 8px; /*  rounded corners */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* subtle shadow */
 }
 
 .goal-card p {
-    margin-bottom: 25px; /* Adds space below the description */
+    margin-bottom: 25px; 
 }
 
 .progress-container {
     width: 100%;
-    background-color: #e0e0df; /* Light grey */
+    background-color:lightgray; /* Light grey */
     border-radius: 5px;
     position: relative;
     height: 20px;
@@ -76,7 +72,7 @@
 }
 
 .progress-bar {
-    background-color: #4caf50; /* Green */
+    background-color: green;
     height: 100%; /* Matches the container's height */
     border-radius: 5px;
     transition: width 0.3s ease-in-out;
@@ -84,10 +80,10 @@
 
 .progress-info {
     position: relative;
-    margin-top: 5px; /* Adds space between the bar and the numbers */
+    margin-top: 5px; 
     display: flex;
     justify-content: space-between;
-    font-size: 12px; /* Optional: Adjust size of numbers */
+    font-size: 12px; 
 }
 
 .progress-info .start-value {
@@ -105,8 +101,52 @@
     top: -50px; /* Moves the current value above the bar */
     left: 50%; /* Centers the current value at the progress bar's width */
     transform: translateX(-50%); /* Centers it horizontally */
-    background: white; /* Optional: Add a background for contrast */
-    padding: 2px 5px; /* Optional: Add padding for readability */
-    border-radius: 3px; /* Optional: Rounds corners */
+    background: white; 
+    padding: 2px 5px; 
+    border-radius: 3px; /* Rounds corners */
 }
  
+
+
+.modal {
+    display: flex; 
+    justify-content: center; 
+    align-items: center; 
+    z-index: 1000; /* Ensures the modal is on top of other page elements */
+  }
+  
+  .modal-content {
+    background-color: white; 
+    padding: 20px; 
+    width: 350px; 
+    border-radius: 8px; /* Rounds the corners of the modal content */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Adds a subtle shadow to give the modal a lifted effect */
+  }
+  
+  /* Form fields */
+  input, select, textarea {
+    width: 100%; /* Makes form fields take up the full width of the modal content */
+    padding: 8px; 
+    margin-bottom: 12px; 
+    border: 1px solid lightgray; 
+    border-radius: 4px; /* Rounds the corners of the fields */
+    font-size: 14px; 
+  }
+  
+  textarea {
+    height: 100px; /* Sets a fixed height for textareas */
+    resize: none; /* Disables resizing of the textarea */
+  }
+  
+  /* Button Styling */
+  button {
+    padding: 8px 16px;
+    background-color: blue;
+    color: white; 
+    border: none; /* Removes the default border around the button */
+    border-radius: 4px; /* Rounds the corners of the button */
+    font-size: 14px; 
+    cursor: pointer;
+    margin: 5px; 
+  }
+  
