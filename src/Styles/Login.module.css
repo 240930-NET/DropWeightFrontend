@@ -47,6 +47,8 @@
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s ease;
+    background-color: white;
+    color: #333;
 }
 
 .inputField:focus {
@@ -85,9 +87,13 @@
 }
 
 .divider {
-    margin: 20px 0;
+    margin: 15px 0;
     border: none;
     border-top: 1px solid #e9ecef;
+}
+
+.loginLink {
+    margin-top: 5px;
 }
 
 .loginLink p {

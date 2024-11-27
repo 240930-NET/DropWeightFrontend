@@ -54,6 +54,8 @@
     border-radius: 8px;
     font-size: 16px;
     transition: all 0.3s ease;
+    background-color: white;
+    color: #333;
 }
 
 .inputField:focus {
@@ -95,14 +97,14 @@
 
 /* Divider */
 .divider {
-    margin: 20px 0;
+    margin: 15px 0;
     border: none;
     border-top: 1px solid #e9ecef;
 }
 
 /* Links */
 .registerLink {
-    margin: 0;
+    margin-top: 5px;
     font-size: 14px;
     color: #666;
 }
