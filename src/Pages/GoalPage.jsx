@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/GoalPage.css';
+import { UserContext } from "../Utils/UserContext";
 
 function GoalPage() {
     const [goals, setGoals] = useState([]);
     const[inProgressGoals, setInProgressGoals] = useState([]);
     const [completedGoals, setCompletedGoals] = useState([]);
     const [isModalOpen, setIsModalOpen] = useState(false);
-    const { authToken, currentUser: user } = React.useContext(UserContext);
+    const { authToken, currentUser} = React.useContext(UserContext);
+    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // For opening the edit modal
+    const [goalToEdit, setGoalToEdit] = useState(null); // Holds the goal being edited
     const [newGoal, setNewGoal] = useState({
         Type: 0, 
         GoalName: "",
@@ -15,33 +18,26 @@ function GoalPage() {
         StartingValue: 0,
         TargetValue: 0,
         CurrentValue: 0,
-        UserId: user.userId
+        UserId: currentUser.userId
     });
 
-
-    // const fetchGoals = async () => {
-    //     try {
-    //         const response = await fetch("http://localhost:5276/api/Goal");
-    //         const data = await response.json();
-    //         setGoals(data);
-    //     }
-    //     catch(error) {
-    //         console.log(error);
-    //     }
-    // };
-
-    
+    const goalTypeMapping = {
+        0: "Weight",
+        1: "Strength",
+        2: "Mile Time",
+        3: "Custom"
+    };
 
     const fetchGoals = async () => {
         try {
             const response = await fetch("http://localhost:5276/api/Goal");
             const data = await response.json();
-            console.log("Fetched goals:", data); // Check the data structure
-            setGoals(data); // Ensure this updates the state
-        } catch (error) {
+            setGoals(data);
+        }
+        catch(error) {
             console.log(error);
         }
-    };
+    };    
 
 
     const addGoal = async () => {
@@ -50,21 +46,22 @@ function GoalPage() {
             const response = await fetch("http://localhost:5276/api/Goal", {
                 method: "POST",
                 headers: {
-                    "Content-Type": "application/json"
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${authToken}`, // Added
                 },
-                body: JSON.stringify(newGoal)
+                body: JSON.stringify(newGoal),
             });
             if (response.ok) {
                 setIsModalOpen(false);
                 setNewGoal({
-                    Type: 0, 
+                    Type: 0,
                     GoalName: "",
                     IsAchieved: false,
                     Description: "",
                     StartingValue: 0,
                     TargetValue: 0,
                     CurrentValue: 0,
-                    UserId: user.userId
+                    UserId: currentUser.userId,
                 });
                 fetchGoals(); // Refresh goals
             } else {
@@ -75,23 +72,59 @@ function GoalPage() {
             console.error(error);
         }
     };
+    
+
+    const updateGoal = async () => {
+        try {
+            const response = await fetch(`http://localhost:5276/api/Goal/${goalToEdit.goalId}`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${authToken}`, // Added
+                },
+                body: JSON.stringify(goalToEdit),
+            });
+    
+            if (response.ok) {
+                setIsEditModalOpen(false); // Close the modal
+                fetchGoals(); // Refresh the list of goals
+            } else {
+                const error = await response.text();
+                console.error("Error updating goal:", error);
+            }
+        } catch (error) {
+            console.error("Error updating goal:", error);
+        }
+    };
 
 
-    // const deleteGoal = async () => {
-    //     try {
-    //         const token = localStorage.getItem('token');
-    //         if (token) {
-    //             setAuthToken(token);
-    //         }
-    //         const response = await apiClient.delete('/user/DeleteUser');
-    //         setUserId(response.data.userId);
-    //         alert("Account successfully deleted");
-    //     }
-    //     catch (error) {
-    //         console.error("Error deleting account:", error.response?.data || error.message)
-    //         alert("There was a problem deleting your account. Please try again");
-    //     }
-    // };
+    const openEditModal = (goal) => {
+        setGoalToEdit({ ...goal }); // Prefill with the selected goal's data
+        setIsEditModalOpen(true);
+    };
+
+
+    const deleteGoal = async (goalId) => {
+        try {
+            const response = await fetch(`http://localhost:5276/api/Goal/${goalId}`, {
+                method: "DELETE",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": `Bearer ${authToken}`, // Added
+                },
+            });
+    
+            if (response.ok) {
+                // Remove the deleted goal from the local state
+                setGoals(goals.filter(goal => goal.goalId !== goalId));
+            } else {
+                const error = await response.text();
+                console.error("Error deleting goal:", error);
+            }
+        } catch (error) {
+            console.error("Error deleting goal:", error);
+        }
+    };    
 
 
     useEffect(() => {
@@ -128,9 +161,8 @@ function GoalPage() {
         <div className = "kanban-board">
 
 
-
             {/* Add Goal Button */}
-            <button onClick={() => setIsModalOpen(true) }>Add Goal</button>
+            <button className="add-goal-button" onClick={() => setIsModalOpen(true) }>Add Goal</button>
 
             {/* Modal for Adding Goal */}
             {isModalOpen && (
@@ -195,65 +227,139 @@ function GoalPage() {
             )}
 
 
+            {/* Modal for updating a goal*/}
+            {isEditModalOpen && (
+                <div className="modal">
+                    <div className="modal-content">
+                        <h3>Edit Goal</h3>
+                        <label>
+                            Goal Type:
+                            <select
+                                value={goalToEdit?.type}
+                                onChange={(e) => setGoalToEdit({ ...goalToEdit, type: parseInt(e.target.value, 10) })}
+                            >
+                                <option value="0">Weight</option>
+                                <option value="1">Strength</option>
+                                <option value="2">Mile Time</option>
+                                <option value="3">Custom</option>
+                            </select>
+                        </label>
+                        <label>
+                            Goal Name:
+                            <input
+                                type="text"
+                                value={goalToEdit?.goalName || ""}
+                                onChange={(e) => setGoalToEdit({ ...goalToEdit, goalName: e.target.value })}
+                            />
+                        </label>
+                        <label>
+                            Description:
+                            <textarea
+                                value={goalToEdit?.description || ""}
+                                onChange={(e) => setGoalToEdit({ ...goalToEdit, description: e.target.value })}
+                            />
+                        </label>
+                        <label>
+                            Starting Value:
+                            <input
+                                type="number"
+                                value={goalToEdit?.startingValue || 0}
+                                onChange={(e) => setGoalToEdit({ ...goalToEdit, startingValue: parseFloat(e.target.value) })}
+                            />
+                        </label>
+                        <label>
+                            Target Value:
+                            <input
+                                type="number"
+                                value={goalToEdit?.targetValue || 0}
+                                onChange={(e) => setGoalToEdit({ ...goalToEdit, targetValue: parseFloat(e.target.value) })}
+                            />
+                        </label>
+                        <label>
+                            Current Value:
+                            <input
+                                type="number"
+                                value={goalToEdit?.currentValue || 0}
+                                onChange={(e) => setGoalToEdit({ ...goalToEdit, currentValue: parseFloat(e.target.value) })}
+                            />
+                        </label>
+                        <button onClick={updateGoal}>Update Goal</button>
+                        <button onClick={() => setIsEditModalOpen(false)}>Cancel</button>
+                    </div>
+                </div>
+            )}
 
 
+            <div className = "kanban-board-columns">
 
+                <div className = "kanban-column-progress">
+                    <h2> Goals In Progress </h2>
+                    {inProgressGoals.length > 0 ? (
+                        inProgressGoals.map(goal => (
+                            <div key={goal.goalId} className="goal-card">
+                                <h3> {goal.goalName ? goal.goalName : goalTypeMapping[goal.type]} </h3>
+                                <p> {goal.description} </p>
 
+                                <div className="progress-container">
+                                    <div className="progress-bar" style={{
+                                        width: `${goal.progress}%`
+                                    }}>
+                                    </div>
 
-            <div className = "kanban-column-progress">
-                <h2> Goals In Progress </h2>
-                {inProgressGoals.length > 0 ? (
-                    inProgressGoals.map(goal => (
-                        <div key={goal.goalId} className="goal-card">
-                            <h3> {goal.goalName ? goal.goalName : goal.type} </h3>
-                            <p> {goal.description} </p>
-
-                            <div className="progress-container">
-                                <div className="progress-bar" style={{
-                                    width: `${goal.progress}%`
-                                }}>
+                                    <div className="progress-info">
+                                        <span className="start-value">{goal.startingValue}</span>
+                                        <span className="current-value" style={{ left: `${goal.progress}%` }}> {goal.currentValue}</span>
+                                        <span className="target-value">{goal.targetValue}</span>
+                                    </div>
                                 </div>
+                                
+                                {/* Edit Button */}
+                                <button className="edit-button" onClick={() => openEditModal(goal)}>Edit</button>
 
-                                <div className="progress-info">
-                                    <span className="start-value">{goal.startingValue}</span>
-                                    <span className="current-value" style={{ left: `${goal.progress}%` }}> {goal.currentValue}</span>
-                                    <span className="target-value">{goal.targetValue}</span>
-                                </div>
+                                {/* Delete Button */}
+                                <button className="delete-button" onClick={() => deleteGoal(goal.goalId)}>Delete</button>
+
                             </div>
+                        ))
+                    ) : (
+                        <p> No goals in progress </p>
+                    )}
+                    
+                    
+                </div>
+
+                <div className = "kanban-column-complete">
+                    <h2> Completed Goals </h2>
+                    {completedGoals.length > 0 ? (
+                        completedGoals.map(goal => (
+                            <div key={goal.GoalId} className="goal-card"> 
+                                <h3> {goal.GoalName ? goal.GoalName : goalTypeMapping[goal.type]} </h3>
+                                <p> {goal.Description} </p>
+
+                                <div className = "progress-container">
+                                    <div className = "progress-bar" style={{width: `${goal.Progress}%`}}> </div>
+                                    <div className = "progress-info">
+                                        <span className="start-value"> {goal.StartingValue} </span>
+                                        <span className="current-value" style={{ left: `${goal.Progress}%` }}> {goal.CurrentValue} </span>
+                                        <span className="target-value"> {goal.TargetValue} </span>
+                                    </div>
+                                </div>
+
+                                {/* Edit Button */}
+                                <button className="edit-button" onClick={() => openEditModal(goal)}>Edit</button>
+
+                                {/* Delete Button */}
+                                <button className="delete-button" onClick={() => deleteGoal(goal.goalId)}>Delete</button>
                             
-                        </div>
-                    ))
-                ) : (
-                    <p> No goals in progress </p>
-                )}
-                
-                
-            </div>
-
-            <div className = "kanban-column-complete">
-                <h2> Completed Goals </h2>
-                {completedGoals.length > 0 ? (
-                    completedGoals.map(goal => (
-                        <div key={goal.GoalId} className="goal-card"> 
-                            <h3> {goal.GoalName ? goal.GoalName : goal.Type} </h3>
-                            <p> {goal.Description} </p>
-
-                            <div className = "progress-container">
-                                <div className = "progress-bar" style={{width: `${goal.Progress}%`}}> </div>
-                                <div className = "progress-info">
-                                    <span className="start-value"> {goal.StartingValue} </span>
-                                    <span className="current-value" style={{ left: `${goal.Progress}%` }}> {goal.CurrentValue} </span>
-                                    <span className="target-value"> {goal.TargetValue} </span>
-                                </div>
                             </div>
-                        
-                        </div>
-                    ))
-                ) : (
-                    <p> No completed goals </p>
-                )}
+                        ))
+                    ) : (
+                        <p> No completed goals </p>
+                    )}
+                </div>
+                    
             </div>
-                
+
         </div>
     )
 

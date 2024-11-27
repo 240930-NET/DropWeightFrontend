@@ -4,21 +4,55 @@
     display: block;
 }
 
-
 .kanban-board {
     display: flex; /* Enables flexbox layout */
-    justify-content: space-between; /* Distributes columns with space between */
-    gap: 100px;
+    flex-direction: column; /* Stack button and columns vertically */
+    gap: 20px; /* Adjust the gap between button and columns */
+}
+
+.kanban-board-columns {
+    display: flex; /* Keeps columns side by side horizontally */
+    justify-content: space-between; /* Distribute columns with space between */
+    gap: 150px; /* Adjust space between the columns */
+}
+
+.add-goal-button {
+    align-self: center; /* Centers the button horizontally */
+    margin-bottom: 20px; /* Adds space below the button */
+    margin-top: 20px; /* Adds space above the button (between the button and navbar) */
+    padding: 10px 20px; /* Adds space inside the button (top-bottom, left-right) */
+    border-radius: 5px; /* Optional: rounds the corners of the button */
+    background-color: green; /* green background to make the border stand out */
+    color: white; /* white text color */
+    font-size: 16px; /* Adjusts font size */
+    cursor: pointer; /* Makes the button look clickable */
+    width: auto; /* Button width adjusts to its content */
+    transition: background-color 0.3s, color 0.3s; /* Smooth transition for hover effects */
+}
+
+.edit-button, .delete-button {
+    padding: 8px 12px;
+    background-color: #4caf50; /* Green */
+    border: none;
+    color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 20px; /* Moves the buttons beneath the progress bar */
+    margin-left: 20px; /* Adds space between the buttons */
+}
+
+.delete-button {
+    background-color: #f44336; /* Red */
 }
 
 .kanban-column-progress {
     flex: 1; /* Makes this column take equal space */
+    white-space: nowrap; /* Prevents the header text from wrapping */
 }
 
 .kanban-column-complete {
     flex: 1; /* Makes this column take equal space */
 }
-
 
 .goal-card {
     padding: 15px; /* Add padding inside the goal card */

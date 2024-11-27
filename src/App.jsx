@@ -39,7 +39,7 @@ function MainApp() {
             <>
               <Route exact path="/" element={<HomePage />} />
               <Route path="/nutrition" element={<Nutrition />} />
-              <Route path="/goal" element = {<GoalPage />} />
+              <Route path="/goals" element = {<GoalPage />} />
             </>
           ) : (
             <Route path="/*" element={<Navigate to="/login" replace />} />
