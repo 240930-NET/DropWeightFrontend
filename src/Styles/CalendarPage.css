@@ -1,0 +1,36 @@
+.card-list {
+    display: grid;
+    gap: 2.5%;
+    grid-template-columns: 23% 23% 23% 23%;
+}
+
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e0e0e0;
+    border-radius: 8px;
+    padding: 5%;
+    margin: 1px;
+    color: #111111;
+    width: 90%;
+    height: auto;
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.card:hover {
+    background-color: #a4d2fd;
+    border-left: solid blue;
+}
+
+.browse-page {
+    text-align: center;
+    padding-top: 2.5%;
+}
+
+body {
+    background-color: lightblue;
+}
+
+#root {
+    padding-bottom: 20%;
+}

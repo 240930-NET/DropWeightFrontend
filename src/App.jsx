@@ -8,7 +8,7 @@ import Workout from "./Pages/Workout"
 import ContactUs from './Pages/ContactUs';
 import PrivacyPolicy from './Pages/PrivacyPolicy';
 import TermsOfService from './Pages/TermsOfService';
-
+import CalendarPage from "./Pages/CalendarPage";
 import React, { useContext } from "react";
 import { Container } from "reactstrap";
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
@@ -48,6 +48,7 @@ function MainApp() {
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/calendar" element = {<CalendarPage />} />
             </>
           ) : (
             <Route path="*" element={<Navigate to="/login" />} />
