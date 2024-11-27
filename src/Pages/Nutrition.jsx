@@ -1,21 +1,14 @@
 import React, { useState, useEffect, useContext } from "react";
-import { 
-    Container, 
-    Row, 
-    Col, 
-    Button, 
-    Modal, 
-    ModalHeader, 
-    ModalBody, 
-    ModalFooter
-} from 'reactstrap';
+import { UserContext } from "../Utils/UserContext";
+import { addNutrition, getUserNutrition, deleteNutrition } from "../Api/Nutrition";
 import NutritionList from "../Components/NutritionList";
 import NutritionToday from "../Components/NutritionToday";
 import NutritionForm from "../Components/NutritionForm";
-import { UserContext } from "../Utils/UserContext";
-import { addNutrition, getUserNutrition, deleteNutrition } from "../Api/Nutrition";
+import { PlusCircle, X } from 'lucide-react';
+import "../Styles/nutrition.css";
+import { Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
-function Nutrition() {
+const NutritionTracker = () => {
     const { authToken, currentUser } = useContext(UserContext);
     const [nutritions, setNutrition] = useState([]);
     const [todayNutrition, setToday] = useState([]);
@@ -109,7 +102,10 @@ function Nutrition() {
                 </Col>
                 <Col md={4} className="flex-column d-flex align-items-center">
                     <NutritionToday nutrition={todayNutrition} />
-                    <Button color="primary" className="mt-2" onClick={toggle}>Add Nutrition</Button>
+                    <Button className="add-nutrition-btn" onClick={toggle}>
+                        <PlusCircle size={16} />
+                        Add Nutrition
+                    </Button>
                 </Col>
             </Row>
             <Modal isOpen={addNutritionModal} toggle={toggle}>
@@ -121,23 +117,19 @@ function Nutrition() {
                         handleSubmit={handleAddNutritionSubmit} 
                     />
                 </ModalBody>
-                <ModalFooter>
-                    <Button color="secondary" onClick={handleCancel}>Cancel</Button>
-                </ModalFooter>
             </Modal>
             <Modal isOpen={showPopUp} toggle={closePopup}>
                 <ModalHeader toggle={closePopup}>Error</ModalHeader>
                 <ModalBody>
-                <p>{error}</p>
+                    <p>{error}</p>
                 </ModalBody>
                 <ModalFooter>
-                <Button color="secondary" onClick={closePopup}>Close</Button>
-            </ModalFooter>
-        </Modal>
+                    <Button color="secondary" onClick={closePopup}>Close</Button>
+                </ModalFooter>
+            </Modal>
         </Container>
-        
     );
-}
+};
 
-export default Nutrition;
+export default NutritionTracker;
 

@@ -28,31 +28,27 @@ function App() {
 function MainApp() {
   const { currentUser: user } = React.useContext(UserContext);
 
-
   return (
     <>
       {user && <Navbar />}
       <Container className="mainContainer">
         <Routes>
-          {!user ? (
-            <>
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-            </>
-          ) : (
-            <Route path="/*" element={<Navigate to="/" replace />} />
-          )}
+          {/* Public Routes */}
+          <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />
+          <Route path="/register" element={!user ? <Register /> : <Navigate to="/" />} />
+
+          {/* Protected Routes */}
           {user ? (
             <>
-              <Route exact path="/" element={<HomePage />} />
+              <Route path="/" element={<HomePage />} />
               <Route path="/nutrition" element={<Nutrition />} />
-              <Route path="/goals" element = {<GoalPage />} />
+              <Route path="/goals" element={<GoalPage />} />
               <Route path="/contact" element={<ContactUs />} />
               <Route path="/privacy" element={<PrivacyPolicy />} />
               <Route path="/terms" element={<TermsOfService />} />
             </>
           ) : (
-            <Route path="/*" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/login" />} />
           )}
         </Routes>
       </Container>
