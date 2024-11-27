@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from "react";
 import FullCalendar from "@fullcalendar/react";
 import dayGridPlugin from "@fullcalendar/daygrid";
 import timeGridPlugin from "@fullcalendar/timegrid";
-import interactionPlugin from "@fullcalendar/interaction"; // Needed for interactions like select
+import interactionPlugin from "@fullcalendar/interaction";
 import AddScheduleModal from "./AddScheduleModal";
 import { UserContext } from "../Utils/UserContext";
 import "../Styles/CalendarView.css";
@@ -13,11 +13,10 @@ const CalendarView = () => {
   const [clickedDateRange, setClickedDateRange] = useState(null);
   const { currentUser, authToken } = useContext(UserContext);
 
-  // Fetch workout schedules for the user
   const fetchSchedules = async () => {
     try {
       const response = await fetch(
-        `http://localhost:5276/api/workout-schedules/user/${currentUser.userId}`,
+        `https://dropweightbackend.azurewebsites.net/user/${currentUser.userId}`,
         {
           headers: {
             Authorization: `Bearer ${authToken}`,
@@ -45,16 +44,12 @@ const CalendarView = () => {
     fetchSchedules();
   }, [authToken, currentUser]);
 
-  // Handle date selection on the calendar
-  const handleDateSelect = (info) => {
-    setClickedDateRange({
-      start: info.startStr,
-      end: info.endStr,
-    });
+  const handleDateClick = (info) => {
+    setClickedDateRange({ start: info.dateStr, end: info.dateStr }); 
     setModalOpen(true);
   };
 
-  const handleAddSchedule = (newEvent) => {
+  const handleEventAdd = (newEvent) => {
     setEvents((prevEvents) => [...prevEvents, newEvent]);
   };
 
@@ -65,8 +60,7 @@ const CalendarView = () => {
         plugins={[dayGridPlugin, timeGridPlugin, interactionPlugin]}
         initialView="timeGridWeek"
         events={events}
-        selectable={true} // Enables selection of calendar cells
-        select={handleDateSelect} // Triggered on date click/drag
+        dateClick={handleDateClick} 
         headerToolbar={{
           left: "prev,next today",
           center: "title",
@@ -74,14 +68,12 @@ const CalendarView = () => {
         }}
         editable={false}
       />
-      {isModalOpen && (
-        <AddScheduleModal
-          isOpen={isModalOpen}
-          onClose={() => setModalOpen(false)}
-          onAddSchedule={handleAddSchedule}
-          clickedDateRange={clickedDateRange}
-        />
-      )}
+      <AddScheduleModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
+        onAddSchedule={handleEventAdd}
+        clickedDateRange={clickedDateRange}
+      />
     </div>
   );
 };

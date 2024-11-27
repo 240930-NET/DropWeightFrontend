@@ -30,7 +30,7 @@ const AddScheduleModal = ({ isOpen, onClose, onAddSchedule, clickedDateRange }) 
     };
 
     try {
-      const response = await fetch("http://localhost:5276/api/workout-schedules", {
+      const response = await fetch("https://dropweightbackend.azurewebsites.net/api/workout-schedules", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -45,7 +45,7 @@ const AddScheduleModal = ({ isOpen, onClose, onAddSchedule, clickedDateRange }) 
           id: addedSchedule.workoutScheduleId,
           title: addedSchedule.workoutType
             ? `${addedSchedule.workoutType} (${addedSchedule.reps} reps)`
-            : 1,
+            : "No Workout",
           start: addedSchedule.startTime,
           end: addedSchedule.endTime,
         };
