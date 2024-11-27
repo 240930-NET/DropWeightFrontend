@@ -32,30 +32,28 @@ function HomePage() {
   // Carousel state and handlers
   const testimonials = [
     {
-        src: testimonial1,
-        altText: "Joey's Progress",
-        caption: "Gained muscle and improved strength with DropWeight's structured programs!",
-        author: "Joey Hampton",
-        duration: "6 months transformation"
-    },
-    
-    {
-      src: testimonial2,
-      altText: "Patricia's Transformation",
+      src: testimonial1,
+      altText: "John's Transformation",
       caption: "Lost 20 pounds in 3 months following DropWeight's personalized workout plans!",
-      author: "Patricia Robinson",
+      author: "John Doe",
       duration: "3 months transformation"
     },
-    
     {
-      src: testimonial3,
+      src: testimonial2,
+      altText: "Jane's Progress",
+      caption: "Gained muscle and improved strength with DropWeight's structured programs!",
+      author: "Jane Smith",
+      duration: "6 months transformation"
+    },
+    {
+      src: testimonial1,
       altText: "Mike's Journey",
       caption: "Completely transformed my lifestyle with DropWeight's nutrition tracking!",
       author: "Mike Johnson",
       duration: "4 months transformation"
     },
     {
-      src: testimonial4,
+      src: testimonial2,
       altText: "Sarah's Achievement",
       caption: "From beginner to fitness enthusiast with DropWeight's guidance!",
       author: "Sarah Williams",

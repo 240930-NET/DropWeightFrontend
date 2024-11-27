@@ -31,7 +31,7 @@ const NavBar = () => {
         <div>
             <Navbar
                 style={{
-                    background: "linear-gradient(to right, #2193b0, #203a43, #2c5364)",
+                    background: "linear-gradient(to right, #2193b0, #6dd5ed)",
                     boxShadow: "0 4px 12px rgba(0, 0, 0, 0.15)",
                 }}
                 dark

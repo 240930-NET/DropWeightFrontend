@@ -31,7 +31,7 @@ function MainApp() {
   return (
     <>
       {user && <Navbar />}
-      <Container className="mainContainer">
+      <Container className="mainContainer" fluid>
         <Routes>
           {/* Public Routes */}
           <Route path="/login" element={!user ? <Login /> : <Navigate to="/" />} />

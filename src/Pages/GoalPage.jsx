@@ -1,17 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import '../Styles/GoalPage.css';
 import { UserContext } from "../Utils/UserContext";
+import { Modal, ModalHeader, ModalBody, Form, FormGroup, Label, Input, Button } from 'reactstrap';
+import { Trash2 } from 'lucide-react';
 
 function GoalPage() {
     const [goals, setGoals] = useState([]);
-    const[inProgressGoals, setInProgressGoals] = useState([]);
+    const [inProgressGoals, setInProgressGoals] = useState([]);
     const [completedGoals, setCompletedGoals] = useState([]);
-    const [isModalOpen, setIsModalOpen] = useState(false);
-    const { authToken, currentUser} = React.useContext(UserContext);
-    const [isEditModalOpen, setIsEditModalOpen] = useState(false); // For opening the edit modal
-    const [goalToEdit, setGoalToEdit] = useState(null); // Holds the goal being edited
+    const [modal, setModal] = useState(false);
+    const [editModal, setEditModal] = useState(false);
+    const { authToken, currentUser } = React.useContext(UserContext);
+    const [goalToEdit, setGoalToEdit] = useState(null);
     const [newGoal, setNewGoal] = useState({
-        Type: 0, 
+        Type: 0,
         GoalName: "",
         IsAchieved: false,
         Description: "",
@@ -25,34 +27,42 @@ function GoalPage() {
         0: "Weight",
         1: "Strength",
         2: "Mile Time",
-   //     3: "Custom"
     };
+
+    const toggleModal = () => setModal(!modal);
+    const toggleEditModal = () => setEditModal(!editModal);
 
     const fetchGoals = async () => {
         try {
-            const response = await fetch("http://localhost:5276/api/Goal");
+            const response = await fetch("http://localhost:5276/api/Goal", {
+                headers: {
+                    "Authorization": `Bearer ${authToken}`,
+                    "Content-Type": "application/json"
+                }
+            });
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
             const data = await response.json();
             setGoals(data);
+        } catch(error) {
+            console.error("Error fetching goals:", error);
         }
-        catch(error) {
-            console.log(error);
-        }
-    };    
+    };
 
-
-    const addGoal = async () => {
+    const handleAddGoal = async (e) => {
+        e.preventDefault();
         try {
-            console.log(newGoal);
             const response = await fetch("http://localhost:5276/api/Goal", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${authToken}`, // Added
+                    "Authorization": `Bearer ${authToken}`,
                 },
                 body: JSON.stringify(newGoal),
             });
             if (response.ok) {
-                setIsModalOpen(false);
+                toggleModal();
                 setNewGoal({
                     Type: 0,
                     GoalName: "",
@@ -63,307 +73,307 @@ function GoalPage() {
                     CurrentValue: 0,
                     UserId: currentUser.userId,
                 });
-                fetchGoals(); // Refresh goals
-            } else {
-                const error = await response.text();
-                console.error(error);
+                await fetchGoals();
             }
         } catch (error) {
-            console.error(error);
+            console.error("Error adding goal:", error);
         }
     };
-    
 
-    const updateGoal = async () => {
+    const handleEditGoal = async (e) => {
+        e.preventDefault();
         try {
             const response = await fetch(`http://localhost:5276/api/Goal/${goalToEdit.goalId}`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
-                    "Authorization": `Bearer ${authToken}`, // Added
+                    "Authorization": `Bearer ${authToken}`,
                 },
                 body: JSON.stringify(goalToEdit),
             });
-    
             if (response.ok) {
-                setIsEditModalOpen(false); // Close the modal
-                fetchGoals(); // Refresh the list of goals
-            } else {
-                const error = await response.text();
-                console.error("Error updating goal:", error);
+                toggleEditModal();
+                await fetchGoals();
             }
         } catch (error) {
             console.error("Error updating goal:", error);
         }
     };
 
-
-    const openEditModal = (goal) => {
-        setGoalToEdit({ ...goal }); // Prefill with the selected goal's data
-        setIsEditModalOpen(true);
-    };
-
-
-    const deleteGoal = async (goalId) => {
+    const handleDeleteGoal = async (goalId) => {
         try {
             const response = await fetch(`http://localhost:5276/api/Goal/${goalId}`, {
                 method: "DELETE",
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": `Bearer ${authToken}`, // Added
+                    "Authorization": `Bearer ${authToken}`,
                 },
             });
-    
             if (response.ok) {
-                // Remove the deleted goal from the local state
-                setGoals(goals.filter(goal => goal.goalId !== goalId));
-            } else {
-                const error = await response.text();
-                console.error("Error deleting goal:", error);
+                await fetchGoals();
             }
         } catch (error) {
             console.error("Error deleting goal:", error);
         }
-    };    
+    };
 
+    const openEditModal = (goal) => {
+        setGoalToEdit(goal);
+        setEditModal(true);
+    };
 
     useEffect(() => {
-        fetchGoals();
-    }, []);
-
+        if (authToken) {
+            fetchGoals();
+        }
+    }, [authToken]);
 
     useEffect(() => {
-        console.log("Goals before filtering:", goals); // Log all goals before filtering
-
-        const inProgress = goals.filter(goal => goal.isAchieved === false);
-        const completed = goals.filter(goal => goal.isAchieved === true);
-
-        console.log("Filtered in-progress goals:", inProgress); // Debug filtered goals
-
+        const inProgress = goals.filter(goal => !goal.isAchieved);
+        const completed = goals.filter(goal => goal.isAchieved);
         setInProgressGoals(inProgress);
         setCompletedGoals(completed);
-
-        console.log("in progress goals: " + inProgressGoals);
     }, [goals]);
 
-    console.log("Goal structure in inProgressGoals:", inProgressGoals.map(goal => ({
-        GoalId: goal.goalId,
-        GoalName: goal.goalName,
-        Description: goal.description,
-        Progress: goal.progress,
-        StartingValue: goal.startingValue,
-        CurrentValue: goal.currentValue,
-        TargetValue: goal.targetValue
-    })));
-    
-
     return (
-        <div className = "kanban-board">
+        <div className="kanban-board">
+            <h1 className="goals-title">Track Your Goals</h1>
+            <Button className="add-goal-button" onClick={toggleModal}>
+                Add Goal
+            </Button>
 
+            <div className="kanban-board-columns">
+                <div className="kanban-column-progress">
+                    <h2>Goals In Progress</h2>
+                    {inProgressGoals.map(goal => (
+                        <div key={goal.goalId} className="goal-card">
+                            <h3>{goal.goalName || goalTypeMapping[goal.type]}</h3>
+                            <p>{goal.description}</p>
+                            <div className="progress-container">
+                                <div className="progress-bar" style={{ width: `${goal.progress}%` }}></div>
+                                <div className="progress-info">
+                                    <span className="start-value">{goal.startingValue}</span>
+                                    <span className="current-value" style={{ left: `${goal.progress}%` }}>{goal.currentValue}</span>
+                                    <span className="target-value">{goal.targetValue}</span>
+                                </div>
+                            </div>
+                            <div className="button-group">
+                                <button className="edit-button" onClick={() => openEditModal(goal)}>
+                                    Edit
+                                </button>
+                                <Trash2 
+                                    className="delete-icon" 
+                                    size={25} 
+                                    onClick={() => handleDeleteGoal(goal.goalId)}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
 
-            {/* Add Goal Button */}
-            <button className="add-goal-button" onClick={() => setIsModalOpen(true) }>Add Goal</button>
+                <div className="kanban-column-complete">
+                    <h2>Completed Goals</h2>
+                    {completedGoals.map(goal => (
+                        <div key={goal.goalId} className="goal-card">
+                            <h3>{goal.goalName || goalTypeMapping[goal.type]}</h3>
+                            <p>{goal.description}</p>
+                            <div className="progress-container">
+                                <div className="progress-bar" style={{ width: `${goal.progress}%` }}></div>
+                                <div className="progress-info">
+                                    <span className="start-value">{goal.startingValue}</span>
+                                    <span className="current-value" style={{ left: `${goal.progress}%` }}>{goal.currentValue}</span>
+                                    <span className="target-value">{goal.targetValue}</span>
+                                </div>
+                            </div>
+                            <div className="button-group">
+                                <button className="edit-button" onClick={() => openEditModal(goal)}>
+                                    Update Goal
+                                </button>
+                                <Trash2 
+                                    className="delete-icon" 
+                                    size={24} 
+                                    onClick={() => handleDeleteGoal(goal.goalId)}
+                                />
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            </div>
 
-            {/* Modal for Adding Goal */}
-            {isModalOpen && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <h3>Add a New Goal</h3>
-                        <label>
-                            Goal Type:
-                            <select
+            {/* Add Goal Modal */}
+            <Modal isOpen={modal} toggle={toggleModal}>
+                <ModalHeader toggle={toggleModal} className="modal-header">
+                    <h3 className="modal-title">Add New Goal</h3>
+                </ModalHeader>
+                <ModalBody>
+                    <Form onSubmit={handleAddGoal}>
+                        <FormGroup>
+                            <Label for="goalType">Goal Type</Label>
+                            <Input
+                                type="select"
+                                name="Type"
+                                id="goalType"
                                 value={newGoal.Type}
-                                onChange={(e) => setNewGoal({ ...newGoal, Type: parseInt(e.target.value, 10) })}
+                                onChange={(e) => setNewGoal({ ...newGoal, Type: parseInt(e.target.value) })}
                             >
-                                <option value="0"> Weight </option>
-                                <option value="1"> Strength </option>
-                                <option value="2"> Mile Time </option>
-                           {/*     <option value="3"> Custom </option>  */}
-                            </select>
-                        </label>
-                        <label>
-                            Goal Name:
-                            <input
+                                <option value={0}>Weight</option>
+                                <option value={1}>Strength</option>
+                                <option value={2}>Mile Time</option>
+                            </Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="goalName">Goal Name</Label>
+                            <Input
                                 type="text"
+                                name="GoalName"
+                                id="goalName"
                                 value={newGoal.GoalName}
                                 onChange={(e) => setNewGoal({ ...newGoal, GoalName: e.target.value })}
                             />
-                        </label>
-                        <label>
-                            Description:
-                            <textarea
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="description">Description</Label>
+                            <Input
+                                type="textarea"
+                                name="Description"
+                                id="description"
                                 value={newGoal.Description}
                                 onChange={(e) => setNewGoal({ ...newGoal, Description: e.target.value })}
                             />
-                        </label>
-                        <label>
-                            Starting Value:
-                            <input
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="startingValue">Starting Value</Label>
+                            <Input
                                 type="number"
+                                name="StartingValue"
+                                id="startingValue"
                                 value={newGoal.StartingValue}
                                 onChange={(e) => setNewGoal({ ...newGoal, StartingValue: parseFloat(e.target.value) })}
                             />
-                        </label>
-                        <label>
-                            Target Value:
-                            <input
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="targetValue">Target Value</Label>
+                            <Input
                                 type="number"
+                                name="TargetValue"
+                                id="targetValue"
                                 value={newGoal.TargetValue}
                                 onChange={(e) => setNewGoal({ ...newGoal, TargetValue: parseFloat(e.target.value) })}
                             />
-                        </label>
-                        <label>
-                            Current Value:
-                            <input
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="currentValue">Current Value</Label>
+                            <Input
                                 type="number"
+                                name="CurrentValue"
+                                id="currentValue"
                                 value={newGoal.CurrentValue}
                                 onChange={(e) => setNewGoal({ ...newGoal, CurrentValue: parseFloat(e.target.value) })}
                             />
-                        </label>
-                        <button onClick={addGoal}>Add Goal</button>
-                        <button onClick={() => setIsModalOpen(false)}>Cancel</button>
-                    </div>
-                </div>
-            )}
+                        </FormGroup>
+                        <Button 
+                            type="submit" 
+                            style={{
+                                backgroundColor: '#2193b0',
+                                border: 'none',
+                                width: '100%',
+                                padding: '10px',
+                                marginTop: '20px'
+                            }}
+                        >
+                            Add Goal
+                        </Button>
+                    </Form>
+                </ModalBody>
+            </Modal>
 
-
-            {/* Modal for updating a goal*/}
-            {isEditModalOpen && (
-                <div className="modal">
-                    <div className="modal-content">
-                        <h3>Edit Goal</h3>
-                        <label>
-                            Goal Type:
-                            <select
-                                value={goalToEdit?.type}
-                                onChange={(e) => setGoalToEdit({ ...goalToEdit, type: parseInt(e.target.value, 10) })}
+            {/* Edit Goal Modal */}
+            <Modal isOpen={editModal} toggle={toggleEditModal}>
+                <ModalHeader toggle={toggleEditModal} className="modal-header">
+                    <h3 className="modal-title">Edit Goal</h3>
+                </ModalHeader>
+                <ModalBody>
+                    <Form onSubmit={handleEditGoal}>
+                        <FormGroup>
+                            <Label for="editGoalType">Goal Type</Label>
+                            <Input
+                                type="select"
+                                name="type"
+                                id="editGoalType"
+                                value={goalToEdit?.type || 0}
+                                onChange={(e) => setGoalToEdit({ ...goalToEdit, type: parseInt(e.target.value) })}
                             >
-                                <option value="0">Weight</option>
-                                <option value="1">Strength</option>
-                                <option value="2">Mile Time</option>
-                             {/*   <option value="3">Custom</option>  */}
-                            </select>
-                        </label>
-                        <label>
-                            Goal Name:
-                            <input
+                                <option value={0}>Weight</option>
+                                <option value={1}>Strength</option>
+                                <option value={2}>Mile Time</option>
+                            </Input>
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="editGoalName">Goal Name</Label>
+                            <Input
                                 type="text"
+                                name="goalName"
+                                id="editGoalName"
                                 value={goalToEdit?.goalName || ""}
                                 onChange={(e) => setGoalToEdit({ ...goalToEdit, goalName: e.target.value })}
                             />
-                        </label>
-                        <label>
-                            Description:
-                            <textarea
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="editDescription">Description</Label>
+                            <Input
+                                type="textarea"
+                                name="description"
+                                id="editDescription"
                                 value={goalToEdit?.description || ""}
                                 onChange={(e) => setGoalToEdit({ ...goalToEdit, description: e.target.value })}
                             />
-                        </label>
-                        <label>
-                            Starting Value:
-                            <input
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="editStartingValue">Starting Value</Label>
+                            <Input
                                 type="number"
+                                name="startingValue"
+                                id="editStartingValue"
                                 value={goalToEdit?.startingValue || 0}
                                 onChange={(e) => setGoalToEdit({ ...goalToEdit, startingValue: parseFloat(e.target.value) })}
                             />
-                        </label>
-                        <label>
-                            Target Value:
-                            <input
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="editTargetValue">Target Value</Label>
+                            <Input
                                 type="number"
+                                name="targetValue"
+                                id="editTargetValue"
                                 value={goalToEdit?.targetValue || 0}
                                 onChange={(e) => setGoalToEdit({ ...goalToEdit, targetValue: parseFloat(e.target.value) })}
                             />
-                        </label>
-                        <label>
-                            Current Value:
-                            <input
+                        </FormGroup>
+                        <FormGroup>
+                            <Label for="editCurrentValue">Current Value</Label>
+                            <Input
                                 type="number"
+                                name="currentValue"
+                                id="editCurrentValue"
                                 value={goalToEdit?.currentValue || 0}
                                 onChange={(e) => setGoalToEdit({ ...goalToEdit, currentValue: parseFloat(e.target.value) })}
                             />
-                        </label>
-                        <button onClick={updateGoal}>Update Goal</button>
-                        <button onClick={() => setIsEditModalOpen(false)}>Cancel</button>
-                    </div>
-                </div>
-            )}
-
-
-            <div className = "kanban-board-columns">
-
-                <div className = "kanban-column-progress">
-                    <h2> Goals In Progress </h2>
-                    {inProgressGoals.length > 0 ? (
-                        inProgressGoals.map(goal => (
-                            <div key={goal.goalId} className="goal-card">
-                                <h3> {goal.goalName ? goal.goalName : goalTypeMapping[goal.type]} </h3>
-                                <p> {goal.description} </p>
-
-                                <div className="progress-container">
-                                    <div className="progress-bar" style={{
-                                        width: `${goal.progress}%`
-                                    }}>
-                                    </div>
-
-                                    <div className="progress-info">
-                                        <span className="start-value">{goal.startingValue}</span>
-                                        <span className="current-value" style={{ left: `${goal.progress}%` }}> {goal.currentValue}</span>
-                                        <span className="target-value">{goal.targetValue}</span>
-                                    </div>
-                                </div>
-                                
-                                {/* Edit Button */}
-                                <button className="edit-button" onClick={() => openEditModal(goal)}>Edit</button>
-
-                                {/* Delete Button */}
-                                <button className="delete-button" onClick={() => deleteGoal(goal.goalId)}>Delete</button>
-
-                            </div>
-                        ))
-                    ) : (
-                        <p> No goals in progress </p>
-                    )}
-                    
-                    
-                </div>
-
-                <div className = "kanban-column-complete">
-                    <h2> Completed Goals </h2>
-                    {completedGoals.length > 0 ? (
-                        completedGoals.map(goal => (
-                            <div key={goal.goalId} className="goal-card"> 
-                                <h3> {goal.goalName ? goal.goalName : goalTypeMapping[goal.type]} </h3>
-                                <p> {goal.description} </p>
-
-                                <div className = "progress-container">
-                                    <div className = "progress-bar" style={{width: `${goal.progress}%`}}> </div>
-                                    <div className = "progress-info">
-                                        <span className="start-value"> {goal.startingValue} </span>
-                                        <span className="current-value" style={{ left: `${goal.progress}%` }}> {goal.currentValue} </span>
-                                        <span className="target-value"> {goal.targetValue} </span>
-                                    </div>
-                                </div>
-
-                                {/* Edit Button */}
-                                <button className="edit-button" onClick={() => openEditModal(goal)}>Edit</button>
-
-                                {/* Delete Button */}
-                                <button className="delete-button" onClick={() => deleteGoal(goal.goalId)}>Delete</button>
-                            
-                            </div>
-                        ))
-                    ) : (
-                        <p> No completed goals </p>
-                    )}
-                </div>
-                    
-            </div>
-
+                        </FormGroup>
+                        <Button 
+                            type="submit" 
+                            style={{
+                                backgroundColor: '#2193b0',
+                                border: 'none',
+                                width: '100%',
+                                padding: '10px',
+                                marginTop: '20px'
+                            }}
+                        >
+                            Update Goal
+                        </Button>
+                    </Form>
+                </ModalBody>
+            </Modal>
         </div>
-    )
-
-
+    );
 }
 
 export default GoalPage;

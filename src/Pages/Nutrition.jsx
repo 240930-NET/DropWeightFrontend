@@ -4,7 +4,7 @@ import { addNutrition, getUserNutrition, deleteNutrition } from "../Api/Nutritio
 import NutritionList from "../Components/NutritionList";
 import NutritionToday from "../Components/NutritionToday";
 import NutritionForm from "../Components/NutritionForm";
-import { PlusCircle, X } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import "../Styles/nutrition.css";
 import { Container, Row, Col, Button, Modal, ModalHeader, ModalBody, ModalFooter } from 'reactstrap';
 
@@ -23,7 +23,16 @@ const NutritionTracker = () => {
 
     const [addNutritionFormData, setAddNutritionFormData] = useState(initialAddNutritionFormData);
 
-    const toggle = () => setAddNutritionModal(!addNutritionModal);
+    const toggle = () => {
+        if (addNutritionModal) {
+            document.body.style.overflow = 'unset';
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.parentElement.removeChild(backdrop);
+            }
+        }
+        setAddNutritionModal(!addNutritionModal);
+    };
 
     const isToday = (dateString) => { //utility function to check if a date is today
         const today = new Date();
@@ -94,6 +103,17 @@ const NutritionTracker = () => {
         getNutritions();        
     }, [] );
 
+    useEffect(() => {
+        // Cleanup function
+        return () => {
+            document.body.style.overflow = 'unset';
+            const backdrop = document.querySelector('.modal-backdrop');
+            if (backdrop) {
+                backdrop.parentElement.removeChild(backdrop);
+            }
+        };
+    }, []); // Empty dependency array means this runs on unmount
+
     return (
         <Container style={{marginTop: '20px'}}>
             <Row className="align-items-start">
@@ -108,25 +128,33 @@ const NutritionTracker = () => {
                     </Button>
                 </Col>
             </Row>
-            <Modal isOpen={addNutritionModal} toggle={toggle}>
-                <ModalHeader toggle={toggle}>Fill Out the Form</ModalHeader>
-                <ModalBody>
-                    <NutritionForm 
-                        formData={addNutritionFormData} 
-                        handleChange={handleAddNutritionChange} 
-                        handleSubmit={handleAddNutritionSubmit} 
-                    />
-                </ModalBody>
-            </Modal>
-            <Modal isOpen={showPopUp} toggle={closePopup}>
-                <ModalHeader toggle={closePopup}>Error</ModalHeader>
-                <ModalBody>
-                    <p>{error}</p>
-                </ModalBody>
-                <ModalFooter>
-                    <Button color="secondary" onClick={closePopup}>Close</Button>
-                </ModalFooter>
-            </Modal>
+
+            {addNutritionModal && (
+                <div className="modal-wrapper">
+                    <Modal isOpen={true} toggle={toggle} backdrop={true} keyboard={true}>
+                        <ModalHeader toggle={toggle}>Fill Out the Form</ModalHeader>
+                        <ModalBody>
+                            <NutritionForm 
+                                formData={addNutritionFormData} 
+                                handleChange={handleAddNutritionChange} 
+                                handleSubmit={handleAddNutritionSubmit} 
+                            />
+                        </ModalBody>
+                    </Modal>
+                </div>
+            )}
+
+            {showPopUp && (
+                <Modal isOpen={true} toggle={() => setShowPopup(false)}>
+                    <ModalHeader toggle={() => setShowPopup(false)}>Error</ModalHeader>
+                    <ModalBody>
+                        <p>{error}</p>
+                    </ModalBody>
+                    <ModalFooter>
+                        <Button color="secondary" onClick={() => setShowPopup(false)}>Close</Button>
+                    </ModalFooter>
+                </Modal>
+            )}
         </Container>
     );
 };
