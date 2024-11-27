@@ -1,0 +1,230 @@
+/* Global Styles */
+body {
+  font-family: "Arial", sans-serif;
+  margin: 0;
+  padding: 0;
+  background: linear-gradient(to right, #2193b0, #6dd5ed);
+}
+
+/* Main Container */
+.nutrition-container {
+  background: white;
+  border-radius: 15px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  margin: 30px;
+  padding: 30px;
+}
+
+/* Nutrition List Section */
+.nutrition-list {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.nutrition-list h3 {
+  color: #2193b0;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.nutrition-list-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 15px;
+  background: #f8f9fa;
+  border-radius: 8px;
+  margin-bottom: 10px;
+  transition: transform 0.2s ease-in-out;
+  border: 1px solid #e9ecef;
+}
+
+.nutrition-list-item:hover {
+  transform: translateX(5px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Today's Nutrition Section */
+.nutrition-today {
+  background: white;
+  border-radius: 15px;
+  padding: 25px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+  margin-bottom: 20px;
+}
+
+.nutrition-today h3 {
+  color: #2193b0;
+  font-size: 1.8rem;
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.category {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.category:last-child {
+  border-bottom: none;
+}
+
+/* Add Nutrition Button */
+.add-nutrition-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #2193b0;
+  color: white;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  width: 100%;
+  margin-top: 10px;
+  box-shadow: 0 2px 8px rgba(33, 147, 176, 0.3);
+}
+
+.add-nutrition-btn:hover {
+  background: #1a7a8c;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(33, 147, 176, 0.4);
+}
+
+.add-nutrition-btn svg {
+  margin-right: 10px;
+  font-size: 24px;
+  background: rgba(255, 255, 255, 0.2);
+  padding: 4px;
+  border-radius: 50%;
+  width: 32px;
+  height: 32px;
+}
+
+/* Form Styling */
+.nutrition-form {
+  padding: 20px;
+}
+
+.nutrition-form .form-group {
+  margin-bottom: 20px;
+}
+
+.nutrition-form label {
+  display: block;
+  color: #2193b0;
+  font-weight: 600;
+  margin-bottom: 8px;
+  font-size: 0.95rem;
+}
+
+.nutrition-form input {
+  width: 100%;
+  padding: 12px;
+  border: 2px solid #e9ecef;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: all 0.3s ease;
+}
+
+.nutrition-form input:focus {
+  border-color: #2193b0;
+  box-shadow: 0 0 0 3px rgba(33, 147, 176, 0.1);
+  outline: none;
+}
+
+.nutrition-form button {
+  width: 100%;
+  padding: 12px;
+  background: #2193b0;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 10px;
+}
+
+.nutrition-form button:hover {
+  background: #1a7a8c;
+  transform: translateY(-2px);
+}
+
+/* Modal Styling */
+.modal-content {
+  border-radius: 15px;
+  border: none;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  border-bottom: 2px solid #e9ecef;
+  padding: 20px;
+}
+
+.modal-header h3 {
+  color: #2193b0;
+  font-weight: 600;
+}
+
+.modal-body {
+  padding: 20px;
+}
+
+.modal-footer {
+  border-top: 2px solid #e9ecef;
+  padding: 20px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .nutrition-container {
+    margin: 15px;
+    padding: 15px;
+  }
+
+  .nutrition-list,
+  .nutrition-today {
+    padding: 15px;
+  }
+
+  .nutrition-list h3,
+  .nutrition-today h3 {
+    font-size: 1.5rem;
+  }
+}
+
+/* Add this to your existing styles */
+.modal-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1050;
+}
+
+.modal-open {
+    overflow: hidden;
+}
+
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1040;
+}

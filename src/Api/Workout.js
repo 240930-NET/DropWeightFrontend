@@ -67,7 +67,10 @@ export const createWorkout = async (workout, token) => {
         
         const response = await fetch(url, {
             method: 'POST',
-            ...getCommonHeader(token),
+            headers: {
+                'Authorization': `Bearer ${token}`,
+                'Content-Type': 'application/json'
+            },
             body: JSON.stringify(workout),
         });
         console.log(response)
